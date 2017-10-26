@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace UserStorageServices
 {
@@ -8,10 +9,20 @@ namespace UserStorageServices
     public class UserStorageService
     {
         /// <summary>
+        /// Public c-tor to initialize storage.
+        /// </summary>
+        public UserStorageService()
+        {
+            Storage = new List<User>();
+        }
+
+        /// <summary>
         /// Gets the number of elements contained in the storage.
         /// </summary>
         /// <returns>An amount of users in the storage.</returns>
-        public int Count { get; }
+        public int Count => Storage.Count;
+
+        private List<User> Storage { get; }
 
         /// <summary>
         /// Adds a new <see cref="User"/> to the storage.
