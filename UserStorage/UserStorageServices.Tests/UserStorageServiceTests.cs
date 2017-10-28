@@ -6,6 +6,8 @@ namespace UserStorageServices.Tests
     [TestClass]
     public class UserStorageServiceTests
     {
+        #region AddTests
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Add_NullAsUserArgument_ExceptionThrown()
@@ -73,9 +75,49 @@ namespace UserStorageServices.Tests
             // Assert - [ExpectedException]
         }
 
+        #endregion
+
+        #region RemoveTests
+
         [TestMethod]
-        public void Remove_WithoutArguments_NothingHappen()
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Remove_nullArgument_ExceptionTrown()
         {
+            // Arrange
+            var userStorageService = new UserStorageService();
+
+            // Act
+            userStorageService.Remove(null);
+
+            // Assert - [ExpectedException]
         }
+
+        [TestMethod]
+        public void Remove_ExistingUser_True()
+        {
+            // Arrange
+            var userStorageService = new UserStorageService();
+            var user = new User {Age = 15, FirstName = "Oleg", LastName = "Olegov"};
+            userStorageService.Add(user);
+            // Act
+            var deleted = userStorageService.Remove(user);
+
+            Assert.IsTrue(deleted);
+        }
+
+        [TestMethod]
+        public void Remove_NotExistingUser_False()
+        {
+            // Arrange
+            var userStorageService = new UserStorageService();
+            var user = new User { Age = 15, FirstName = "Oleg", LastName = "Olegov" };
+            userStorageService.Add(user);
+            // Act
+            var deleted = userStorageService.Remove(new User());
+
+            Assert.IsFalse(deleted);
+        }
+
+        #endregion
     }
 }
