@@ -50,8 +50,6 @@ namespace UserStorageServices
                 throw new ArgumentException("Age is incorrect", nameof(user));
             }
 
-            user.Id = Guid.NewGuid();
-
             Storage.Add(user);
         }
 
