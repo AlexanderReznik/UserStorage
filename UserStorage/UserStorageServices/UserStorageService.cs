@@ -39,6 +39,7 @@ namespace UserStorageServices
             {
                 Console.WriteLine("Add() method is called.");
             }
+
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
@@ -74,8 +75,11 @@ namespace UserStorageServices
                 Console.WriteLine("Remove() method is called.");
             }
 
-            if (user == null) throw new ArgumentNullException($"{nameof(user)} is null.");
-
+            if (user == null)
+            {
+                throw new ArgumentNullException($"{nameof(user)} is null.");
+            }
+        
             return Storage.Remove(user);
         }
 
@@ -91,7 +95,10 @@ namespace UserStorageServices
                 Console.WriteLine("Search() method is called.");
             }
 
-            if (predicate == null) throw new ArgumentNullException($"{nameof(predicate)} is null.");
+            if (predicate == null)
+            {
+                throw new ArgumentNullException($"{nameof(predicate)} is null.");
+            }
 
             return Storage.Find(predicate);
         }
@@ -108,7 +115,10 @@ namespace UserStorageServices
                 Console.WriteLine("Search() method is called.");
             }
 
-            if (firstName == null) throw new ArgumentNullException($"{nameof(firstName)} is null.");
+            if (firstName == null)
+            {
+                throw new ArgumentNullException($"{nameof(firstName)} is null.");
+            }
 
             return Storage.Find(u => u.FirstName == firstName);
         }
@@ -125,7 +135,10 @@ namespace UserStorageServices
                 Console.WriteLine("SearchAll() method is called.");
             }
 
-            if (predicate == null) throw new ArgumentNullException($"{nameof(predicate)} is null.");
+            if (predicate == null)
+            {
+                throw new ArgumentNullException($"{nameof(predicate)} is null.");
+            }
 
             return Storage.FindAll(predicate);
         }
@@ -142,7 +155,10 @@ namespace UserStorageServices
                 Console.WriteLine("SearchAll() method is called.");
             }
 
-            if (firstName == null) throw new ArgumentNullException($"{nameof(firstName)} is null.");
+            if (firstName == null)
+            {
+                throw new ArgumentNullException($"{nameof(firstName)} is null.");
+            }
 
             return Storage.FindAll(u => u.FirstName == firstName);
         }

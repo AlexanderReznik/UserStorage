@@ -99,8 +99,14 @@ namespace UserStorageServices.Tests
         {
             // Arrange
             var userStorageService = new UserStorageService();
-            var user = new User {Age = 15, FirstName = "Oleg", LastName = "Olegov"};
+            var user = new User
+            {
+                Age = 15,
+                FirstName = "Oleg",
+                LastName = "Olegov"
+            };
             userStorageService.Add(user);
+
             // Act
             var deleted = userStorageService.Remove(user);
 
@@ -114,6 +120,7 @@ namespace UserStorageServices.Tests
             var userStorageService = new UserStorageService();
             var user = new User { Age = 15, FirstName = "Oleg", LastName = "Olegov" };
             userStorageService.Add(user);
+
             // Act
             var deleted = userStorageService.Remove(new User());
 
@@ -317,10 +324,12 @@ namespace UserStorageServices.Tests
             list.Add(new User { Age = 30, FirstName = "Stas", LastName = "Olegov" });
             list.Add(new User { Age = 35, FirstName = "Volodya", LastName = "Olegov" });
             list.Add(new User { Age = 40, FirstName = "Sergey", LastName = "Egorov" });
+
             foreach (var u in list)
             {
                 storage.Add(u);
             }
+
             return list;
         }
     }
