@@ -22,6 +22,11 @@ namespace UserStorageServices
         /// <returns>An amount of users in the storage.</returns>
         public int Count => Storage.Count;
 
+        /// <summary>
+        /// Enables logging
+        /// </summary>
+        public bool IsLoggingEnabled { get; set; }
+
         private List<User> Storage { get; }
 
         /// <summary>
@@ -30,6 +35,10 @@ namespace UserStorageServices
         /// <param name="user">A new <see cref="User"/> that will be added to the storage.</param>
         public void Add(User user)
         {
+            if (IsLoggingEnabled)
+            {
+                Console.WriteLine("Add() method is called.");
+            }
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
@@ -60,6 +69,11 @@ namespace UserStorageServices
         /// <returns>True if success</returns>
         public bool Remove(User user)
         {
+            if (IsLoggingEnabled)
+            {
+                Console.WriteLine("Remove() method is called.");
+            }
+
             if (user == null) throw new ArgumentNullException($"{nameof(user)} is null.");
 
             return Storage.Remove(user);
@@ -72,7 +86,12 @@ namespace UserStorageServices
         /// <returns>User if exists, else null</returns>
         public User Search(Predicate<User> predicate)
         {
-            if(predicate == null) throw new ArgumentNullException($"{nameof(predicate)} is null.");
+            if (IsLoggingEnabled)
+            {
+                Console.WriteLine("Search() method is called.");
+            }
+
+            if (predicate == null) throw new ArgumentNullException($"{nameof(predicate)} is null.");
 
             return Storage.Find(predicate);
         }
@@ -84,6 +103,11 @@ namespace UserStorageServices
         /// <returns>User if exists, else null</returns>
         public User Search(string firstName)
         {
+            if (IsLoggingEnabled)
+            {
+                Console.WriteLine("Search() method is called.");
+            }
+
             if (firstName == null) throw new ArgumentNullException($"{nameof(firstName)} is null.");
 
             return Storage.Find(u => u.FirstName == firstName);
@@ -96,6 +120,11 @@ namespace UserStorageServices
         /// <returns>IEnumerable with users</returns>
         public IEnumerable<User> SearchAll(Predicate<User> predicate)
         {
+            if (IsLoggingEnabled)
+            {
+                Console.WriteLine("SearchAll() method is called.");
+            }
+
             if (predicate == null) throw new ArgumentNullException($"{nameof(predicate)} is null.");
 
             return Storage.FindAll(predicate);
@@ -108,6 +137,11 @@ namespace UserStorageServices
         /// <returns>IEnumerable with users</returns>
         public IEnumerable<User> SearchAll(string firstName)
         {
+            if (IsLoggingEnabled)
+            {
+                Console.WriteLine("SearchAll() method is called.");
+            }
+
             if (firstName == null) throw new ArgumentNullException($"{nameof(firstName)} is null.");
 
             return Storage.FindAll(u => u.FirstName == firstName);
