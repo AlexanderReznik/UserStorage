@@ -56,6 +56,8 @@ namespace UserStorageServices
         /// <summary>
         /// Removes an existed <see cref="User"/> from the storage.
         /// </summary>
+        /// <param name="user">A user to remove</param>
+        /// <returns>True if success</returns>
         public bool Remove(User user)
         {
             if (user == null) throw new ArgumentNullException($"{nameof(user)} is null.");
@@ -66,9 +68,49 @@ namespace UserStorageServices
         /// <summary>
         /// Searches through the storage for a <see cref="User"/> that matches specified criteria.
         /// </summary>
-        public void Search()
+        /// <param name="predicate">Criteria for searching</param>
+        /// <returns>User if exists, else null</returns>
+        public User Search(Predicate<User> predicate)
         {
-            // TODO: Implement Search() method.
+            if(predicate == null) throw new ArgumentNullException($"{nameof(predicate)} is null.");
+
+            return Storage.Find(predicate);
+        }
+
+        /// <summary>
+        /// Searches through the storage for a <see cref="User"/> that matches specified criteria.
+        /// </summary>
+        /// <param name="firstName">First name for searching</param>
+        /// <returns>User if exists, else null</returns>
+        public User Search(string firstName)
+        {
+            if (firstName == null) throw new ArgumentNullException($"{nameof(firstName)} is null.");
+
+            return Storage.Find(u => u.FirstName == firstName);
+        }
+
+        /// <summary>
+        /// Searches through the storage for a <see cref="User"/> that matches specified criteria.
+        /// </summary>
+        /// <param name="predicate">Criteria for searching</param>
+        /// <returns>IEnumerable with users</returns>
+        public IEnumerable<User> SearchAll(Predicate<User> predicate)
+        {
+            if (predicate == null) throw new ArgumentNullException($"{nameof(predicate)} is null.");
+
+            return Storage.FindAll(predicate);
+        }
+
+        /// <summary>
+        /// Searches through the storage for a <see cref="User"/> that matches specified criteria.
+        /// </summary>
+        /// <param name="firstName">First name for searching</param>
+        /// <returns>IEnumerable with users</returns>
+        public IEnumerable<User> SearchAll(string firstName)
+        {
+            if (firstName == null) throw new ArgumentNullException($"{nameof(firstName)} is null.");
+
+            return Storage.FindAll(u => u.FirstName == firstName);
         }
     }
 }
