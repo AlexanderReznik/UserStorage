@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UserStorageServices.Exceptions;
 
 namespace UserStorageServices.Tests
 {
@@ -24,7 +26,7 @@ namespace UserStorageServices.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(FirstNameIsNullOrEmptyException))]
         public void Add_UserFirstNameIsNull_ExceptionThrown()
         {
             // Arrange
@@ -42,7 +44,7 @@ namespace UserStorageServices.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(LastNameIsNullOrEmptyException))]
         public void Add_UserLasrtNameIsNull_ExceptionThrown()
         {
             // Arrange
@@ -60,7 +62,7 @@ namespace UserStorageServices.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(AgeExceedsLimitsException))]
         public void Add_UserAgeIncorrect_ExceptionThrown()
         {
             // Arrange

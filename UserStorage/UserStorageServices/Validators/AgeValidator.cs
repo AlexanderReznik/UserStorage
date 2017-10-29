@@ -1,4 +1,5 @@
 ﻿using System;
+using UserStorageServices.Exceptions;
 using UserStorageServices.Interfaces;
 
 namespace UserStorageServices.Validators
@@ -9,7 +10,7 @@ namespace UserStorageServices.Validators
         {
             if (user.Age < 0)
             {
-                throw new ArgumentException("Age is incorrect", nameof(user));
+                throw new AgeExceedsLimitsException("Age is incorrect");
             }
         }
     }

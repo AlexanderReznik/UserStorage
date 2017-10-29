@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\AgeExceedsLimitsException.cs" />
+    <Compile Include="Exceptions\FirstNameIsNullOrEmptyException.cs" />
+    <Compile Include="Exceptions\LastNameIsNullOrEmptyException.cs" />
     <Compile Include="Validators\AgeValidator.cs" />
     <Compile Include="Validators\DefaultUserValidator.cs" />
     <Compile Include="GeneratorGuid.cs" />
