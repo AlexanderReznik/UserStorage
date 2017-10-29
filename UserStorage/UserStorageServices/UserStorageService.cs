@@ -11,9 +11,10 @@ namespace UserStorageServices
         /// <summary>
         /// Public c-tor to initialize storage.
         /// </summary>
-        public UserStorageService()
+        public UserStorageService(IGeneratorId generatorId = null)
         {
             Storage = new List<User>();
+            GeneratorId = generatorId ?? new GeneratorGuid();
         }
 
         /// <summary>
@@ -28,6 +29,8 @@ namespace UserStorageServices
         public bool IsLoggingEnabled { get; set; }
 
         private List<User> Storage { get; }
+
+        private IGeneratorId GeneratorId { get; }
 
         /// <summary>
         /// Adds a new <see cref="User"/> to the storage.
@@ -60,6 +63,7 @@ namespace UserStorageServices
                 throw new ArgumentException("Age is incorrect", nameof(user));
             }
 
+            user.Id = GeneratorId.Generate();
             Storage.Add(user);
         }
 
