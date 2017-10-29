@@ -20,7 +20,7 @@ namespace UserStorageServices
         {
             if (_loggingSwitch.Enabled)
             {
-                Console.WriteLine("Add() method is called.");
+                Trace.WriteLine("Add() method is called.");
             }
             base.Add(user);
         }
@@ -29,7 +29,7 @@ namespace UserStorageServices
         {
             if (_loggingSwitch.Enabled)
             {
-                Console.WriteLine("Remove() method is called.");
+                Trace.WriteLine("Remove() method is called.");
             }
             return base.Remove(user);
         }
@@ -38,7 +38,7 @@ namespace UserStorageServices
         {
             if (_loggingSwitch.Enabled)
             {
-                Console.WriteLine("Search() method is called.");
+                Trace.WriteLine("Search() method is called.");
             }
             return base.Search(firstName);
         }
@@ -47,7 +47,7 @@ namespace UserStorageServices
         {
             if (_loggingSwitch.Enabled)
             {
-                Console.WriteLine("Search() method is called.");
+                Trace.WriteLine("Search() method is called.");
             }
             return base.Search(predicate);
         }
@@ -56,7 +56,7 @@ namespace UserStorageServices
         {
             if (_loggingSwitch.Enabled)
             {
-                Console.WriteLine("SearchAll() method is called.");
+                Trace.WriteLine("SearchAll() method is called.");
             }
             return base.SearchAll(firstName);
         }
@@ -65,7 +65,7 @@ namespace UserStorageServices
         {
             if (_loggingSwitch.Enabled)
             {
-                Console.WriteLine("SearchAll() method is called.");
+                Trace.WriteLine("SearchAll() method is called.");
             }
             return base.SearchAll(predicate);
         }
