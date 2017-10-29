@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UserStorageServices.Interfaces;
 
-namespace UserStorageServices
+namespace UserStorageServices.Validators
 {
     public class DefaultUserValidator : IUserValidator
     {

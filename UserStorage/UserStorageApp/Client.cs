@@ -1,4 +1,5 @@
 ﻿using UserStorageServices;
+using UserStorageServices.Interfaces;
 
 namespace UserStorageApp
 {
