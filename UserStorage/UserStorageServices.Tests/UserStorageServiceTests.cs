@@ -260,7 +260,7 @@ namespace UserStorageServices.Tests
         }
 
         [TestMethod]
-        public void SearchAll_ExistingUsersByFirstName_ExceptionTrown()
+        public void SearchAll_ExistingUsersByFirstName_CollectionReturned()
         {
             var userStorageService = new UserStorageService();
             var list = FillStorage(userStorageService);
@@ -274,7 +274,7 @@ namespace UserStorageServices.Tests
         }
 
         [TestMethod]
-        public void SearchAll_ExistingUsersByPredicateFirstName_ExceptionTrown()
+        public void SearchAll_ExistingUsersByPredicateFirstName_CollectionReturned()
         {
             var userStorageService = new UserStorageService();
             var list = FillStorage(userStorageService);
@@ -288,7 +288,7 @@ namespace UserStorageServices.Tests
         }
 
         [TestMethod]
-        public void SearchAll_ExistingUsersByPredicateLastName_ExceptionTrown()
+        public void SearchAll_ExistingUsersByPredicateLastName_CollectionReturned()
         {
             var userStorageService = new UserStorageService();
             var list = FillStorage(userStorageService);
@@ -302,7 +302,7 @@ namespace UserStorageServices.Tests
         }
 
         [TestMethod]
-        public void SearchAll_ExistingUsersByPredicateAge_ExceptionTrown()
+        public void SearchAll_ExistingUsersByPredicateAge_CollectionReturned()
         {
             var userStorageService = new UserStorageService();
             var list = FillStorage(userStorageService);
@@ -310,6 +310,62 @@ namespace UserStorageServices.Tests
 
             // Act
             var returned = userStorageService.SearchAll(u => u.Age <= 30);
+
+            // Assert
+            CollectionAssert.AreEqual(returned.ToList(), expected);
+        }
+
+        [TestMethod]
+        public void SearchAll_ExistingUsersByPredicateFirstNameAndAge_CollectionReturned()
+        {
+            var userStorageService = new UserStorageService();
+            var list = FillStorage(userStorageService);
+            var expected = list.FindAll(u => u.FirstName == "Oleg" && u.Age == 25);
+
+            // Act
+            var returned = userStorageService.SearchAll(u => u.FirstName == "Oleg" && u.Age == 25);
+
+            // Assert
+            CollectionAssert.AreEqual(returned.ToList(), expected);
+        }
+
+        [TestMethod]
+        public void SearchAll_ExistingUsersByPredicateLastNameAndAge_CollectionReturned()
+        {
+            var userStorageService = new UserStorageService();
+            var list = FillStorage(userStorageService);
+            var expected = list.FindAll(u => u.LastName == "Olegov" && u.Age == 30);
+
+            // Act
+            var returned = userStorageService.SearchAll(u => u.LastName == "Olegov" && u.Age == 30);
+
+            // Assert
+            CollectionAssert.AreEqual(returned.ToList(), expected);
+        }
+
+        [TestMethod]
+        public void SearchAll_ExistingUsersByPredicateFirstNameAndLastName_CollectionReturned()
+        {
+            var userStorageService = new UserStorageService();
+            var list = FillStorage(userStorageService);
+            var expected = list.FindAll(u => u.FirstName == "Sergey" && u.LastName == "Egorov");
+
+            // Act
+            var returned = userStorageService.SearchAll(u => u.FirstName == "Sergey" && u.LastName == "Egorov");
+
+            // Assert
+            CollectionAssert.AreEqual(returned.ToList(), expected);
+        }
+
+        [TestMethod]
+        public void SearchAll_ExistingUsersByPredicateFirstNameAndLastNameAndAge_CollectionReturned()
+        {
+            var userStorageService = new UserStorageService();
+            var list = FillStorage(userStorageService);
+            var expected = list.FindAll(u => u.FirstName == "Sergey" && u.LastName == "Egorov" && u.Age == 40);
+
+            // Act
+            var returned = userStorageService.SearchAll(u => u.FirstName == "Sergey" && u.LastName == "Egorov" && u.Age == 40);
 
             // Assert
             CollectionAssert.AreEqual(returned.ToList(), expected);
