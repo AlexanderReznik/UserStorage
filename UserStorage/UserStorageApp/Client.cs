@@ -7,14 +7,14 @@ namespace UserStorageApp
     /// </summary>
     public class Client
     {
-        private readonly UserStorageService _userStorageService;
+        private readonly IUserStorageService _userStorageService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Client"/> class.
         /// </summary>
-        public Client()
+        public Client(IUserStorageService service = null)
         {
-            _userStorageService = new UserStorageService();
+            _userStorageService = service ?? new UserStorageService();
         }
 
         /// <summary>
@@ -22,16 +22,17 @@ namespace UserStorageApp
         /// </summary>
         public void Run()
         {
-            _userStorageService.Add(new User
+            var alex = new User
             {
                 FirstName = "Alex",
                 LastName = "Black",
                 Age = 25
-            });
+            };
+            _userStorageService.Add(alex);
 
-            _userStorageService.Remove();
+            _userStorageService.Search("Alex");
 
-            _userStorageService.Search();
+            _userStorageService.Remove(alex);
         }
     }
 }

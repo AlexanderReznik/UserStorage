@@ -1,19 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace UserStorageServices
 {
     /// <summary>
     /// Represents a service that stores a set of <see cref="User"/>s and allows to search through them.
     /// </summary>
-    public class UserStorageService
+    public class UserStorageService : IUserStorageService
     {
+        /// <summary>
+        /// Enables logging
+        /// </summary>
+        private readonly BooleanSwitch _loggingSwitch = new BooleanSwitch("enableLogging", "Switch for logging");
+
         /// <summary>
         /// Public c-tor to initialize storage.
         /// </summary>
-        public UserStorageService()
+        public UserStorageService(IGeneratorId generatorId = null, IUserValidator userValidator = null)
         {
             Storage = new List<User>();
+            GeneratorId = generatorId ?? new GeneratorGuid();
+            UserValidator = userValidator ?? new DefaultUserValidator();
         }
 
         /// <summary>
@@ -22,12 +30,11 @@ namespace UserStorageServices
         /// <returns>An amount of users in the storage.</returns>
         public int Count => Storage.Count;
 
-        /// <summary>
-        /// Enables logging
-        /// </summary>
-        public bool IsLoggingEnabled { get; set; }
-
         private List<User> Storage { get; }
+
+        private IGeneratorId GeneratorId { get; }
+
+        private IUserValidator UserValidator { get; }
 
         /// <summary>
         /// Adds a new <see cref="User"/> to the storage.
@@ -35,31 +42,13 @@ namespace UserStorageServices
         /// <param name="user">A new <see cref="User"/> that will be added to the storage.</param>
         public void Add(User user)
         {
-            if (IsLoggingEnabled)
+            if (_loggingSwitch.Enabled)
             {
                 Console.WriteLine("Add() method is called.");
             }
 
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            if (string.IsNullOrWhiteSpace(user.FirstName))
-            {
-                throw new ArgumentException("FirstName is null or empty or whitespace", nameof(user));
-            }
-
-            if (string.IsNullOrWhiteSpace(user.LastName))
-            {
-                throw new ArgumentException("LastName is null or empty or whitespace", nameof(user));
-            }
-
-            if (user.Age < 0)
-            {
-                throw new ArgumentException("Age is incorrect", nameof(user));
-            }
-
+            UserValidator.Validate(user);
+            user.Id = GeneratorId.Generate();
             Storage.Add(user);
         }
 
@@ -70,7 +59,7 @@ namespace UserStorageServices
         /// <returns>True if success</returns>
         public bool Remove(User user)
         {
-            if (IsLoggingEnabled)
+            if (_loggingSwitch.Enabled)
             {
                 Console.WriteLine("Remove() method is called.");
             }
@@ -90,7 +79,7 @@ namespace UserStorageServices
         /// <returns>User if exists, else null</returns>
         public User Search(Predicate<User> predicate)
         {
-            if (IsLoggingEnabled)
+            if (_loggingSwitch.Enabled)
             {
                 Console.WriteLine("Search() method is called.");
             }
@@ -110,7 +99,7 @@ namespace UserStorageServices
         /// <returns>User if exists, else null</returns>
         public User Search(string firstName)
         {
-            if (IsLoggingEnabled)
+            if (_loggingSwitch.Enabled)
             {
                 Console.WriteLine("Search() method is called.");
             }
@@ -130,7 +119,7 @@ namespace UserStorageServices
         /// <returns>IEnumerable with users</returns>
         public IEnumerable<User> SearchAll(Predicate<User> predicate)
         {
-            if (IsLoggingEnabled)
+            if (_loggingSwitch.Enabled)
             {
                 Console.WriteLine("SearchAll() method is called.");
             }
@@ -150,7 +139,7 @@ namespace UserStorageServices
         /// <returns>IEnumerable with users</returns>
         public IEnumerable<User> SearchAll(string firstName)
         {
-            if (IsLoggingEnabled)
+            if (_loggingSwitch.Enabled)
             {
                 Console.WriteLine("SearchAll() method is called.");
             }
