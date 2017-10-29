@@ -46,8 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultUserValidator.cs" />
     <Compile Include="GeneratorGuid.cs" />
     <Compile Include="IGeneratorId.cs" />
+    <Compile Include="IUserValidator.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserStorageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

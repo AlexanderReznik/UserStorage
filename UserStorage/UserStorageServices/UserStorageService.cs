@@ -11,10 +11,11 @@ namespace UserStorageServices
         /// <summary>
         /// Public c-tor to initialize storage.
         /// </summary>
-        public UserStorageService(IGeneratorId generatorId = null)
+        public UserStorageService(IGeneratorId generatorId = null, IUserValidator userValidator = null)
         {
             Storage = new List<User>();
             GeneratorId = generatorId ?? new GeneratorGuid();
+            UserValidator = userValidator ?? new DefaultUserValidator();
         }
 
         /// <summary>
@@ -32,6 +33,8 @@ namespace UserStorageServices
 
         private IGeneratorId GeneratorId { get; }
 
+        private IUserValidator UserValidator { get; }
+
         /// <summary>
         /// Adds a new <see cref="User"/> to the storage.
         /// </summary>
@@ -43,26 +46,7 @@ namespace UserStorageServices
                 Console.WriteLine("Add() method is called.");
             }
 
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            if (string.IsNullOrWhiteSpace(user.FirstName))
-            {
-                throw new ArgumentException("FirstName is null or empty or whitespace", nameof(user));
-            }
-
-            if (string.IsNullOrWhiteSpace(user.LastName))
-            {
-                throw new ArgumentException("LastName is null or empty or whitespace", nameof(user));
-            }
-
-            if (user.Age < 0)
-            {
-                throw new ArgumentException("Age is incorrect", nameof(user));
-            }
-
+            UserValidator.Validate(user);
             user.Id = GeneratorId.Generate();
             Storage.Add(user);
         }
