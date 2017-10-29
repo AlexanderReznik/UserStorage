@@ -10,6 +10,11 @@ namespace UserStorageServices
     public class UserStorageService : IUserStorageService
     {
         /// <summary>
+        /// Enables logging
+        /// </summary>
+        private readonly BooleanSwitch _loggingSwitch = new BooleanSwitch("enableLogging", "Switch for logging");
+
+        /// <summary>
         /// Public c-tor to initialize storage.
         /// </summary>
         public UserStorageService(IGeneratorId generatorId = null, IUserValidator userValidator = null)
@@ -24,11 +29,6 @@ namespace UserStorageServices
         /// </summary>
         /// <returns>An amount of users in the storage.</returns>
         public int Count => Storage.Count;
-
-        /// <summary>
-        /// Enables logging
-        /// </summary>
-        private readonly BooleanSwitch _loggingSwitch = new BooleanSwitch("enableLogging", "Switch for logging");
 
         private List<User> Storage { get; }
 
