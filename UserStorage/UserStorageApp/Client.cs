@@ -22,16 +22,17 @@ namespace UserStorageApp
         /// </summary>
         public void Run()
         {
-            _userStorageService.Add(new User
+            var alex = new User
             {
                 FirstName = "Alex",
                 LastName = "Black",
                 Age = 25
-            });
+            };
+            _userStorageService.Add(alex);
 
-            _userStorageService.Remove();
+            _userStorageService.Search("Alex");
 
-            _userStorageService.Search();
+            _userStorageService.Remove(alex);
         }
     }
 }
