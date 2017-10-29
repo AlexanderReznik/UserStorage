@@ -1,4 +1,5 @@
 ﻿using UserStorageServices;
+using UserStorageServices.Interfaces;
 
 namespace UserStorageApp
 {
@@ -14,7 +15,7 @@ namespace UserStorageApp
         /// </summary>
         public Client(IUserStorageService service = null)
         {
-            _userStorageService = service ?? new UserStorageService();
+            _userStorageService = service ?? new UserStorageServiceLog(new UserStorageService());
         }
 
         /// <summary>
