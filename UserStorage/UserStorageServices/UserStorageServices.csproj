@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Validators\AgeValidator.cs" />
     <Compile Include="Validators\DefaultUserValidator.cs" />
     <Compile Include="GeneratorGuid.cs" />
     <Compile Include="Interfaces\IGeneratorId.cs" />
@@ -54,6 +55,8 @@
     <Compile Include="User.cs" />
     <Compile Include="UserStorageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\FirstNameValidator.cs" />
+    <Compile Include="Validators\LastNameValidator.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
