@@ -14,9 +14,9 @@ namespace UserStorageServices
             UserStorageService = service ?? new UserStorageService();
         }
 
-        protected IUserStorageService UserStorageService { get; }
-
         public int Count => UserStorageService.Count;
+
+        protected IUserStorageService UserStorageService { get; }
 
         public virtual void Add(User user)
         {

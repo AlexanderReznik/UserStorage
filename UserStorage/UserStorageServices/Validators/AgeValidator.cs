@@ -4,7 +4,7 @@ using UserStorageServices.Interfaces;
 
 namespace UserStorageServices.Validators
 {
-    class AgeValidator : IUserValidator
+    public class AgeValidator : IUserValidator
     {
         public void Validate(User user)
         {
