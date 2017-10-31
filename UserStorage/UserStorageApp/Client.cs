@@ -41,12 +41,16 @@ namespace UserStorageApp
 
             Console.WriteLine("And now something useful");
 
-            var slave1 = new UserStorageServiceLog(new UserStorageService());
-            var slave2 = new UserStorageService();
+            var slave1 = new UserStorageServiceLog(new UserStorageService(UserStorageServiceMode.SlaveNode));
+            var slave2 = new UserStorageService(UserStorageServiceMode.SlaveNode);
+            var slave3 = new UserStorageService(UserStorageServiceMode.SlaveNode);
 
-            var master = new UserStorageServiceLog(new UserStorageService(mode : UserStorageServiceMode.MasterNode, slaves : new IUserStorageService[] {slave1, slave2}));
+            var master = new UserStorageService(mode : UserStorageServiceMode.MasterNode, slaves : new IUserStorageService[] {slave1, slave2});
+            master.AddSubscriber(slave3);
 
             master.Add(alex);
+
+            Console.WriteLine(slave3.Search(u => u.FirstName == "Alex").LastName);
 
             //slave2.Add(alex);
 

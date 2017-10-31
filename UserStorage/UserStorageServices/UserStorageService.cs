@@ -16,7 +16,7 @@ namespace UserStorageServices
     /// <summary>
     /// Represents a service that stores a set of <see cref="User"/>s and allows to search through them.
     /// </summary>
-    public class UserStorageService : IUserStorageService
+    public class UserStorageService : IUserStorageService, INotificationSubscriber
     {
         /// <summary>
         /// Public c-tor to initialize storage.
@@ -27,6 +27,7 @@ namespace UserStorageServices
             GeneratorId = generatorId ?? new GeneratorGuid();
             UserValidator = userValidator ?? new DefaultUserValidator();
             Mode = mode;
+            Subscribers = new List<INotificationSubscriber>();
             if (Mode == UserStorageServiceMode.MasterNode)
             {
                 Slaves = slaves?.ToList() ?? new List<IUserStorageService>();
@@ -53,6 +54,8 @@ namespace UserStorageServices
 
         private List<IUserStorageService> Slaves { get; }
 
+        private List<INotificationSubscriber> Subscribers { get; }
+
         /// <summary>
         /// Adds a new <see cref="User"/> to the storage.
         /// </summary>
@@ -67,6 +70,10 @@ namespace UserStorageServices
                 foreach (var service in Slaves)
                 {
                     service.Add(user);
+                }
+                foreach (var subscriber in Subscribers)
+                {
+                    subscriber.UserAdded(user);
                 }
             }
             else
@@ -99,6 +106,10 @@ namespace UserStorageServices
                 foreach (var service in Slaves)
                 {
                     service.Remove(user);
+                }
+                foreach (var subscriber in Subscribers)
+                {
+                    subscriber.UserRemoved(user);
                 }
                 return Storage.Remove(user);
             }
@@ -176,6 +187,40 @@ namespace UserStorageServices
             return Storage.FindAll(u => u.FirstName == firstName);
         }
 
+        public void UserAdded(User user)
+        {
+            Add(user);
+        }
+
+        public void UserRemoved(User user)
+        {
+            Remove(user);
+        }
+
+        public void AddSubscriber(INotificationSubscriber subscriber)
+        {
+            if (Mode == UserStorageServiceMode.MasterNode)
+            {
+                Subscribers.Add(subscriber);
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+
+        public void RemoveSubscriber(INotificationSubscriber subscriber)
+        {
+            if (Mode == UserStorageServiceMode.MasterNode)
+            {
+                Subscribers.Remove(subscriber);
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+
         private bool CheckStackCall(StackTrace st, string command)
         {
             int i = 1;
@@ -188,6 +233,6 @@ namespace UserStorageServices
                     break;
             }
             return i < st.FrameCount;
-        }
+        }  
     }
 }
