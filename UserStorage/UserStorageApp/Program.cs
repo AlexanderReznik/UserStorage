@@ -16,7 +16,7 @@ namespace UserStorageApp
 
             using (var host = new ServiceHost(MyDiagnostics.Create(serviceConfiguration)))
             {
-                host.SmartOpen();
+                //host.SmartOpen();
 
                 var client = new Client();
 

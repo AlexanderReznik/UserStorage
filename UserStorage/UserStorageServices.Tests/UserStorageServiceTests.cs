@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.ExceptionServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UserStorageServices.Exceptions;
+using UserStorageServices.Interfaces;
 
 namespace UserStorageServices.Tests
 {
@@ -369,6 +370,93 @@ namespace UserStorageServices.Tests
 
             // Assert
             CollectionAssert.AreEqual(returned.ToList(), expected);
+        }
+
+        #endregion
+
+        #region Master-SlaveTests
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void Add_Slave_ExceptionThrown()
+        {
+            // Arrange
+            var userStorageService = new UserStorageService(mode: UserStorageServiceMode.SlaveNode);
+
+            // Act
+            userStorageService.Add(new User
+            {
+                FirstName = "Oleg",
+                LastName = "Olegov",
+                Age = 20
+            });
+
+            // Assert - [ExpectedException]
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void Remove_Slave_ExceptionThrown()
+        {
+            // Arrange
+            var userStorageService = new UserStorageService(mode: UserStorageServiceMode.SlaveNode);
+
+            // Act
+            userStorageService.Remove(new User
+            {
+                FirstName = "Oleg",
+                LastName = "Olegov",
+                Age = 20
+            });
+
+            // Assert - [ExpectedException]
+        }
+
+        [TestMethod]
+        public void Add_Master_AllAdded()
+        {
+            // Arrange
+            var alex = new User
+            {
+                FirstName = "Alex",
+                LastName = "Black",
+                Age = 25
+            };
+
+            var slave1 = new UserStorageServiceLog(new UserStorageService());
+            var slave2 = new UserStorageService();
+
+            var master = new UserStorageServiceLog(new UserStorageService(mode: UserStorageServiceMode.MasterNode, slaves: new IUserStorageService[] { slave1, slave2 }));
+
+            // Act
+            master.Add(alex);
+
+            // Assert
+            Assert.IsTrue(master.Count == 1 && slave1.Count == 1 && slave2.Count == 1);
+        }
+
+        [TestMethod]
+        public void Remove_Master_AllRemoved()
+        {
+            // Arrange
+            var alex = new User
+            {
+                FirstName = "Alex",
+                LastName = "Black",
+                Age = 25
+            };
+
+            var slave1 = new UserStorageServiceLog(new UserStorageService());
+            var slave2 = new UserStorageService();
+
+            var master = new UserStorageServiceLog(new UserStorageService(mode: UserStorageServiceMode.MasterNode, slaves: new IUserStorageService[] { slave1, slave2 }));
+            master.Add(alex);
+
+            // Act
+            master.Remove(alex);
+
+            // Assert
+            Assert.IsTrue(master.Count == 0 && slave1.Count == 0 && slave2.Count == 0);
         }
 
         #endregion

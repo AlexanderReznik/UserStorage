@@ -1,29 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using UserStorageServices.Interfaces;
 using UserStorageServices.Validators;
 
 namespace UserStorageServices
 {
+    public enum UserStorageServiceMode
+    {
+        MasterNode,
+        SlaveNode
+    }
+
     /// <summary>
     /// Represents a service that stores a set of <see cref="User"/>s and allows to search through them.
     /// </summary>
     public class UserStorageService : IUserStorageService
     {
         /// <summary>
-        /// Enables logging
-        /// </summary>
-        private readonly BooleanSwitch _loggingSwitch = new BooleanSwitch("enableLogging", "Switch for logging");
-
-        /// <summary>
         /// Public c-tor to initialize storage.
         /// </summary>
-        public UserStorageService(IGeneratorId generatorId = null, IUserValidator userValidator = null)
+        public UserStorageService(UserStorageServiceMode mode = UserStorageServiceMode.MasterNode, IEnumerable<IUserStorageService> slaves = null, IGeneratorId generatorId = null, IUserValidator userValidator = null)
         {
             Storage = new List<User>();
             GeneratorId = generatorId ?? new GeneratorGuid();
             UserValidator = userValidator ?? new DefaultUserValidator();
+            Mode = mode;
+            if (Mode == UserStorageServiceMode.MasterNode)
+            {
+                Slaves = slaves?.ToList() ?? new List<IUserStorageService>();
+            }
+            else
+            {
+                Slaves = null;
+            }
         }
 
         /// <summary>
@@ -38,17 +49,40 @@ namespace UserStorageServices
 
         private IUserValidator UserValidator { get; }
 
+        private UserStorageServiceMode Mode { get; }
+
+        private List<IUserStorageService> Slaves { get; }
+
         /// <summary>
         /// Adds a new <see cref="User"/> to the storage.
         /// </summary>
         /// <param name="user">A new <see cref="User"/> that will be added to the storage.</param>
         public void Add(User user)
         {
-            UserValidator.Validate(user);
-            user.Id = GeneratorId.Generate();
-            Storage.Add(user);
+            if (Mode == UserStorageServiceMode.MasterNode)
+            {
+                UserValidator.Validate(user);
+                user.Id = GeneratorId.Generate();
+                Storage.Add(user);
+                foreach (var service in Slaves)
+                {
+                    service.Add(user);
+                }
+            }
+            else
+            {
+                StackTrace st = new StackTrace(true);
+                if (CheckStackCall(st, "Void Add"))
+                {
+                    Storage.Add(user);
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
+            }
         }
-
+        
         /// <summary>
         /// Removes an existed <see cref="User"/> from the storage.
         /// </summary>
@@ -56,12 +90,30 @@ namespace UserStorageServices
         /// <returns>True if success</returns>
         public bool Remove(User user)
         {
-            if (user == null)
+            if (Mode == UserStorageServiceMode.MasterNode)
             {
-                throw new ArgumentNullException($"{nameof(user)} is null.");
+                if (user == null)
+                {
+                    throw new ArgumentNullException($"{nameof(user)} is null.");
+                }
+                foreach (var service in Slaves)
+                {
+                    service.Remove(user);
+                }
+                return Storage.Remove(user);
             }
-        
-            return Storage.Remove(user);
+            else
+            {
+                StackTrace st = new StackTrace(true);
+                if (CheckStackCall(st, "Boolean Remove"))
+                {
+                    return Storage.Remove(user);
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
+            }
         }
 
         /// <summary>
@@ -122,6 +174,20 @@ namespace UserStorageServices
             }
 
             return Storage.FindAll(u => u.FirstName == firstName);
+        }
+
+        private bool CheckStackCall(StackTrace st, string command)
+        {
+            int i = 1;
+            for (; i < st.FrameCount; i++)
+            {
+                var frame = st.GetFrame(i);
+                string className = frame.GetMethod().DeclaringType.FullName;
+                string methodName = frame.GetMethod().ToString();
+                if (className == typeof(UserStorageService).FullName && methodName == $"{command}({typeof(User).FullName})")
+                    break;
+            }
+            return i < st.FrameCount;
         }
     }
 }

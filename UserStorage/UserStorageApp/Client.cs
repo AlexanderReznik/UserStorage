@@ -1,4 +1,7 @@
-﻿using UserStorageServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using UserStorageServices;
 using UserStorageServices.Interfaces;
 
 namespace UserStorageApp
@@ -29,11 +32,27 @@ namespace UserStorageApp
                 LastName = "Black",
                 Age = 25
             };
+
             _userStorageService.Add(alex);
 
             _userStorageService.Search("Alex");
 
             _userStorageService.Remove(alex);
+
+            Console.WriteLine("And now something useful");
+
+            var slave1 = new UserStorageServiceLog(new UserStorageService());
+            var slave2 = new UserStorageService();
+
+            var master = new UserStorageServiceLog(new UserStorageService(mode : UserStorageServiceMode.MasterNode, slaves : new IUserStorageService[] {slave1, slave2}));
+
+            master.Add(alex);
+
+            //slave2.Add(alex);
+
+            master.Remove(alex);
+
+            //slave1.Remove(alex);
         }
     }
 }
