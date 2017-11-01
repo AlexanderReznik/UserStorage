@@ -18,5 +18,7 @@ namespace UserStorageServices.Interfaces
         IEnumerable<User> SearchAll(string firstName);
 
         IEnumerable<User> SearchAll(Predicate<User> predicate);
+
+        UserStorageServiceMode ServiceMode { get; }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UserStorageServices.Interfaces;
+using UserStorageServices.Services;
 
 namespace UserStorageServices
 {
@@ -11,7 +12,7 @@ namespace UserStorageServices
     {
         protected UserStorageServiceDecorator(IUserStorageService service)
         {
-            UserStorageService = service ?? new UserStorageService();
+            UserStorageService = service ?? new UserStorageServiceSlave();
         }
 
         public int Count => UserStorageService.Count;
@@ -47,5 +48,7 @@ namespace UserStorageServices
         {
             return UserStorageService.SearchAll(predicate);
         }
+
+        public UserStorageServiceMode ServiceMode => UserStorageService.ServiceMode;
     }
 }

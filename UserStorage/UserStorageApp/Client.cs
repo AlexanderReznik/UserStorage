@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using UserStorageServices;
 using UserStorageServices.Interfaces;
+using UserStorageServices.Services;
 
 namespace UserStorageApp
 {
@@ -18,7 +19,7 @@ namespace UserStorageApp
         /// </summary>
         public Client(IUserStorageService service = null)
         {
-            _userStorageService = service ?? new UserStorageServiceLog(new UserStorageService());
+            _userStorageService = service ?? new UserStorageServiceLog(new UserStorageServiceMaster());
         }
 
         /// <summary>
@@ -41,13 +42,15 @@ namespace UserStorageApp
 
             Console.WriteLine("And now something useful");
 
-            var slave1 = new UserStorageServiceLog(new UserStorageService(UserStorageServiceMode.SlaveNode));
-            var slave2 = new UserStorageService(UserStorageServiceMode.SlaveNode);
-            var slave3 = new UserStorageService(UserStorageServiceMode.SlaveNode);
+            
+            var slave1 = new UserStorageServiceLog(new UserStorageServiceSlave());
+            var slave2 = new UserStorageServiceSlave();
+            var slave3 = new UserStorageServiceSlave();
 
-            var master = new UserStorageService(mode : UserStorageServiceMode.MasterNode, slaves : new IUserStorageService[] {slave1, slave2});
-            master.AddSubscriber(slave3);
-
+            var service = new UserStorageServiceMaster(slaves: new List<IUserStorageService>() {slave1, slave2});
+            service.AddSubscriber(slave3);
+            var master = new UserStorageServiceLog(service);
+            
             master.Add(alex);
 
             Console.WriteLine(slave3.Search(u => u.FirstName == "Alex").LastName);
