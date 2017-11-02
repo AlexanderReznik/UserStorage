@@ -32,9 +32,9 @@ namespace UserStorageServices
         /// <returns>An amount of users in the storage.</returns>
         public int Count => Storage.Count;
 
-        protected List<User> Storage { get; }
-
         public abstract UserStorageServiceMode ServiceMode { get; }
+
+        protected List<User> Storage { get; }
 
         /// <summary>
         /// Adds a new <see cref="User"/> to the storage.

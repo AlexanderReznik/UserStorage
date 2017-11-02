@@ -7,6 +7,8 @@ namespace UserStorageServices.Interfaces
     {
         int Count { get; }
 
+        UserStorageServiceMode ServiceMode { get; }
+
         void Add(User user);
 
         bool Remove(User user);
@@ -18,7 +20,5 @@ namespace UserStorageServices.Interfaces
         IEnumerable<User> SearchAll(string firstName);
 
         IEnumerable<User> SearchAll(Predicate<User> predicate);
-
-        UserStorageServiceMode ServiceMode { get; }
     }
 }

@@ -42,12 +42,15 @@ namespace UserStorageApp
 
             Console.WriteLine("And now something useful");
 
-            
             var slave1 = new UserStorageServiceLog(new UserStorageServiceSlave());
             var slave2 = new UserStorageServiceSlave();
             var slave3 = new UserStorageServiceSlave();
 
-            var service = new UserStorageServiceMaster(slaves: new List<IUserStorageService>() {slave1, slave2});
+            var service = new UserStorageServiceMaster(slaves: new List<IUserStorageService>()
+            {
+                slave1,
+                slave2
+            });
             service.AddSubscriber(slave3);
             var master = new UserStorageServiceLog(service);
             
@@ -55,11 +58,7 @@ namespace UserStorageApp
 
             Console.WriteLine(slave3.Search(u => u.FirstName == "Alex").LastName);
 
-            //slave2.Add(alex);
-
             master.Remove(alex);
-
-            //slave1.Remove(alex);
         }
     }
 }

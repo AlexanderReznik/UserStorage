@@ -13,18 +13,12 @@ namespace UserStorageServices.Services
     {
         public UserStorageServiceMaster(IGeneratorId generatorId = null, IUserValidator userValidator = null, IEnumerable<IUserStorageService> slaves = null) : base()
         {
-            GeneratorId = generatorId ?? new GeneratorGuid();
-            UserValidator = userValidator ?? new DefaultUserValidator();
-            Slaves = slaves?.ToList() ?? new List<IUserStorageService>();
-            UserAdded = (a, b) => { };
-            UserRemoved = (a, b) => { };
+            this.GeneratorId = generatorId ?? new GeneratorGuid();
+            this.UserValidator = userValidator ?? new DefaultUserValidator();
+            this.Slaves = slaves?.ToList() ?? new List<IUserStorageService>();
+            this.UserAdded = (a, b) => { };
+            this.UserRemoved = (a, b) => { };
         }
-
-        private List<IUserStorageService> Slaves { get; }
-
-        private IGeneratorId GeneratorId { get; }
-
-        private IUserValidator UserValidator { get; }
 
         private event EventHandler<User> UserAdded;
 
@@ -32,18 +26,24 @@ namespace UserStorageServices.Services
 
         public override UserStorageServiceMode ServiceMode => UserStorageServiceMode.MasterNode;
 
+        private List<IUserStorageService> Slaves { get; }
+
+        private IGeneratorId GeneratorId { get; }
+
+        private IUserValidator UserValidator { get; }
+
         /// <summary>
         /// Adds a new <see cref="User"/> to the storage.
         /// </summary>
         /// <param name="user">A new <see cref="User"/> that will be added to the storage.</param>
         public override void Add(User user)
         {
-            UserValidator.Validate(user);
-            user.Id = GeneratorId.Generate();
+            this.UserValidator.Validate(user);
+            user.Id = this.GeneratorId.Generate();
             base.Add(user);
-            UserAdded(this, user);
+            this.UserAdded(this, user);
 
-            foreach (var slave in Slaves)
+            foreach (var slave in this.Slaves)
             {
                 slave.Add(user);
             }
@@ -61,9 +61,9 @@ namespace UserStorageServices.Services
                 throw new ArgumentNullException($"{nameof(user)} is null.");
             }
 
-            UserRemoved(this, user);
+            this.UserRemoved(this, user);
 
-            foreach (var slave in Slaves)
+            foreach (var slave in this.Slaves)
             {
                 slave.Remove(user);
             }
@@ -78,8 +78,8 @@ namespace UserStorageServices.Services
                 throw new ArgumentNullException($"{nameof(subscriber)} is null.");
             }
 
-            UserAdded += subscriber.UserAdded;
-            UserRemoved += subscriber.UserRemoved;
+            this.UserAdded += subscriber.UserAdded;
+            this.UserRemoved += subscriber.UserRemoved;
         }
 
         public void RemoveSubscriber(INotificationSubscriber subscriber)
@@ -89,8 +89,8 @@ namespace UserStorageServices.Services
                 throw new ArgumentNullException($"{nameof(subscriber)} is null.");
             }
 
-            UserAdded -= subscriber.UserAdded;
-            UserRemoved -= subscriber.UserRemoved;
+            this.UserAdded -= subscriber.UserAdded;
+            this.UserRemoved -= subscriber.UserRemoved;
         }
     }
 }

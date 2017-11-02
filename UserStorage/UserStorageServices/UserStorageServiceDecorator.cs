@@ -17,6 +17,8 @@ namespace UserStorageServices
 
         public int Count => UserStorageService.Count;
 
+        public UserStorageServiceMode ServiceMode => UserStorageService.ServiceMode;
+
         protected IUserStorageService UserStorageService { get; }
 
         public virtual void Add(User user)
@@ -48,7 +50,5 @@ namespace UserStorageServices
         {
             return UserStorageService.SearchAll(predicate);
         }
-
-        public UserStorageServiceMode ServiceMode => UserStorageService.ServiceMode;
     }
 }

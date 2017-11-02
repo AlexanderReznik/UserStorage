@@ -19,7 +19,7 @@ namespace UserStorageServices.Services
         public override void Add(User user)
         {
             StackTrace st = new StackTrace(true);
-            if (CheckStackCall(st, "Void Add"))
+            if (this.CheckStackCall(st, "Void Add"))
             {
                 base.Add(user);
             }
@@ -37,7 +37,7 @@ namespace UserStorageServices.Services
         public override bool Remove(User user)
         {
             StackTrace st = new StackTrace(true);
-            if (CheckStackCall(st, "Boolean Remove"))
+            if (this.CheckStackCall(st, "Boolean Remove"))
             {
                 return base.Remove(user);
             }
@@ -45,17 +45,16 @@ namespace UserStorageServices.Services
             {
                 throw new NotSupportedException();
             }
-            
         }
 
         public void UserAdded(object sender, object user)
         {
-            Add((User)user);
+            this.Add((User)user);
         }
 
         public void UserRemoved(object sender, object user)
         {
-            Remove((User)user);
+            this.Remove((User)user);
         }
 
         private bool CheckStackCall(StackTrace st, string command)
@@ -66,9 +65,13 @@ namespace UserStorageServices.Services
                 var frame = st.GetFrame(i);
                 string className = frame.GetMethod().DeclaringType.FullName;
                 string methodName = frame.GetMethod().ToString();
-                if (className == typeof(UserStorageServiceMaster).FullName && methodName == $"{command}({typeof(User).FullName})")
+                if (className == typeof(UserStorageServiceMaster).FullName &&
+                    methodName == $"{command}({typeof(User).FullName})")
+                {
                     break;
+                }
             }
+
             return i < st.FrameCount;
         }
     }
