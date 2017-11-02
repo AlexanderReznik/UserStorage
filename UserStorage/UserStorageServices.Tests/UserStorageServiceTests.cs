@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.ExceptionServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UserStorageServices.Exceptions;
+using UserStorageServices.Interfaces;
+using UserStorageServices.Services;
 
 namespace UserStorageServices.Tests
 {
@@ -17,7 +18,7 @@ namespace UserStorageServices.Tests
         public void Add_NullAsUserArgument_ExceptionThrown()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
 
             // Act
             userStorageService.Add(null);
@@ -30,7 +31,7 @@ namespace UserStorageServices.Tests
         public void Add_UserFirstNameIsNull_ExceptionThrown()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
 
             // Act
             userStorageService.Add(new User
@@ -48,7 +49,7 @@ namespace UserStorageServices.Tests
         public void Add_UserLasrtNameIsNull_ExceptionThrown()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
 
             // Act
             userStorageService.Add(new User
@@ -66,7 +67,7 @@ namespace UserStorageServices.Tests
         public void Add_UserAgeIncorrect_ExceptionThrown()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
 
             // Act
             userStorageService.Add(new User
@@ -88,7 +89,7 @@ namespace UserStorageServices.Tests
         public void Remove_nullArgument_ExceptionTrown()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
 
             // Act
             userStorageService.Remove(null);
@@ -100,7 +101,7 @@ namespace UserStorageServices.Tests
         public void Remove_ExistingUser_True()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var user = new User
             {
                 Age = 15,
@@ -119,7 +120,7 @@ namespace UserStorageServices.Tests
         public void Remove_NotExistingUser_False()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var user = new User { Age = 15, FirstName = "Oleg", LastName = "Olegov" };
             userStorageService.Add(user);
 
@@ -138,7 +139,7 @@ namespace UserStorageServices.Tests
         public void Search_nullStringArgument_ExceptionTrown()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
 
             // Act
             userStorageService.Search((string)null);
@@ -151,7 +152,7 @@ namespace UserStorageServices.Tests
         public void Search_nullPredicateArgument_ExceptionTrown()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
 
             // Act
             userStorageService.Search((Predicate<User>)null);
@@ -163,7 +164,7 @@ namespace UserStorageServices.Tests
         public void Search_NotExistingUser_NullReturned()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             FillStorage(userStorageService);
 
             // Act
@@ -177,13 +178,13 @@ namespace UserStorageServices.Tests
         public void Search_ExistingUserByPredicateFirstName_UserReturned()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.Find(u => u.FirstName == "Oleg");
 
             // Act
             var returned = userStorageService.Search(u => u.FirstName == "Oleg");
-            
+
             // Assert
             Assert.AreEqual(returned, expected);
         }
@@ -192,7 +193,7 @@ namespace UserStorageServices.Tests
         public void Search_ExistingUserByPredicateLastName_UserReturned()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.Find(u => u.LastName == "Olegov");
 
@@ -207,7 +208,7 @@ namespace UserStorageServices.Tests
         public void Search_ExistingUserByPredicateAge_UserReturned()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.Find(u => u.Age == 15);
 
@@ -222,7 +223,7 @@ namespace UserStorageServices.Tests
         public void Search_ExistingUserByFirstName_UserReturned()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.Find(u => u.FirstName == "Oleg");
 
@@ -238,7 +239,7 @@ namespace UserStorageServices.Tests
         public void SearchAll_nullStringArgument_ExceptionTrown()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
 
             // Act
             userStorageService.SearchAll((string)null);
@@ -251,7 +252,7 @@ namespace UserStorageServices.Tests
         public void SearchAll_nullPredicateArgument_ExceptionTrown()
         {
             // Arrange
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
 
             // Act
             userStorageService.SearchAll((Predicate<User>)null);
@@ -262,7 +263,7 @@ namespace UserStorageServices.Tests
         [TestMethod]
         public void SearchAll_ExistingUsersByFirstName_CollectionReturned()
         {
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.FindAll(u => u.FirstName == "Oleg");
 
@@ -276,7 +277,7 @@ namespace UserStorageServices.Tests
         [TestMethod]
         public void SearchAll_ExistingUsersByPredicateFirstName_CollectionReturned()
         {
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.FindAll(u => u.FirstName == "Oleg");
 
@@ -290,7 +291,7 @@ namespace UserStorageServices.Tests
         [TestMethod]
         public void SearchAll_ExistingUsersByPredicateLastName_CollectionReturned()
         {
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.FindAll(u => u.LastName == "Olegov");
 
@@ -304,7 +305,7 @@ namespace UserStorageServices.Tests
         [TestMethod]
         public void SearchAll_ExistingUsersByPredicateAge_CollectionReturned()
         {
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.FindAll(u => u.Age <= 30);
 
@@ -318,7 +319,7 @@ namespace UserStorageServices.Tests
         [TestMethod]
         public void SearchAll_ExistingUsersByPredicateFirstNameAndAge_CollectionReturned()
         {
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.FindAll(u => u.FirstName == "Oleg" && u.Age == 25);
 
@@ -332,7 +333,7 @@ namespace UserStorageServices.Tests
         [TestMethod]
         public void SearchAll_ExistingUsersByPredicateLastNameAndAge_CollectionReturned()
         {
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.FindAll(u => u.LastName == "Olegov" && u.Age == 30);
 
@@ -346,7 +347,7 @@ namespace UserStorageServices.Tests
         [TestMethod]
         public void SearchAll_ExistingUsersByPredicateFirstNameAndLastName_CollectionReturned()
         {
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.FindAll(u => u.FirstName == "Sergey" && u.LastName == "Egorov");
 
@@ -360,12 +361,13 @@ namespace UserStorageServices.Tests
         [TestMethod]
         public void SearchAll_ExistingUsersByPredicateFirstNameAndLastNameAndAge_CollectionReturned()
         {
-            var userStorageService = new UserStorageService();
+            var userStorageService = new UserStorageServiceMaster();
             var list = FillStorage(userStorageService);
             var expected = list.FindAll(u => u.FirstName == "Sergey" && u.LastName == "Egorov" && u.Age == 40);
 
             // Act
-            var returned = userStorageService.SearchAll(u => u.FirstName == "Sergey" && u.LastName == "Egorov" && u.Age == 40);
+            var returned =
+                userStorageService.SearchAll(u => u.FirstName == "Sergey" && u.LastName == "Egorov" && u.Age == 40);
 
             // Assert
             CollectionAssert.AreEqual(returned.ToList(), expected);
@@ -373,7 +375,99 @@ namespace UserStorageServices.Tests
 
         #endregion
 
-        private List<User> FillStorage(UserStorageService storage)
+        #region Master-SlaveTests
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void Add_Slave_ExceptionThrown()
+        {
+            // Arrange
+            var userStorageService = new UserStorageServiceSlave();
+
+            // Act
+            userStorageService.Add(new User
+            {
+                FirstName = "Oleg",
+                LastName = "Olegov",
+                Age = 20
+            });
+
+            // Assert - [ExpectedException]
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void Remove_Slave_ExceptionThrown()
+        {
+            // Arrange
+            var userStorageService = new UserStorageServiceSlave();
+
+            // Act
+            userStorageService.Remove(new User
+            {
+                FirstName = "Oleg",
+                LastName = "Olegov",
+                Age = 20
+            });
+
+            // Assert - [ExpectedException]
+        }
+
+        [TestMethod]
+        public void Add_Master_AllAdded()
+        {
+            // Arrange
+            var alex = new User
+            {
+                FirstName = "Alex",
+                LastName = "Black",
+                Age = 25
+            };
+
+            var slave1 = new UserStorageServiceLog(new UserStorageServiceSlave());
+            var slave2 = new UserStorageServiceSlave();
+            var slave3 = new UserStorageServiceSlave();
+
+            var master = new UserStorageServiceMaster(slaves: new List<IUserStorageService> { slave1, slave2 });
+            master.AddSubscriber(slave3);
+
+            // Act
+            master.Add(alex);
+
+            // Assert
+            Assert.IsTrue(master.Count == 1 && slave1.Count == 1 && slave2.Count == 1 && slave3.Count == 1);
+        }
+
+        [TestMethod]
+        public void Remove_Master_AllRemoved()
+        {
+            // Arrange
+            var alex = new User
+            {
+                FirstName = "Alex",
+                LastName = "Black",
+                Age = 25
+            };
+
+            var slave1 = new UserStorageServiceLog(new UserStorageServiceSlave());
+            var slave2 = new UserStorageServiceSlave();
+            var slave3 = new UserStorageServiceSlave();
+
+            var master = new UserStorageServiceMaster(slaves: new List<IUserStorageService> { slave1, slave2 });
+            master.AddSubscriber(slave3);
+
+            master.Add(alex);
+
+            // Act
+            master.Remove(alex);
+
+            // Assert
+            Assert.IsTrue(master.Count == 0 && slave1.Count == 0 && slave2.Count == 0 && slave3.Count == 0);
+        }
+
+        #endregion
+
+        private List<User> FillStorage(UserStorageServiceMaster storage)
         {
             var list = new List<User>();
             list.Add(new User { Age = 15, FirstName = "Oleg", LastName = "Egorov" });

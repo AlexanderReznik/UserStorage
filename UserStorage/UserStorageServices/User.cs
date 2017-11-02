@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UserStorageServices
+﻿namespace UserStorageServices
 {
     /// <summary>
     /// Represents a user.

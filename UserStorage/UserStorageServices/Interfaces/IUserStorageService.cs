@@ -7,6 +7,8 @@ namespace UserStorageServices.Interfaces
     {
         int Count { get; }
 
+        UserStorageServiceMode ServiceMode { get; }
+
         void Add(User user);
 
         bool Remove(User user);
