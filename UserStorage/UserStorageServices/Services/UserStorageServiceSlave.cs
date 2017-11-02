@@ -48,14 +48,14 @@ namespace UserStorageServices.Services
             
         }
 
-        public void UserAdded(User user)
+        public void UserAdded(object sender, object user)
         {
-            Add(user);
+            Add((User)user);
         }
 
-        public void UserRemoved(User user)
+        public void UserRemoved(object sender, object user)
         {
-            Remove(user);
+            Remove((User)user);
         }
 
         private bool CheckStackCall(StackTrace st, string command)

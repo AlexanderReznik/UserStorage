@@ -15,17 +15,20 @@ namespace UserStorageServices.Services
         {
             GeneratorId = generatorId ?? new GeneratorGuid();
             UserValidator = userValidator ?? new DefaultUserValidator();
-            Subscribers = new List<INotificationSubscriber>();
             Slaves = slaves?.ToList() ?? new List<IUserStorageService>();
+            UserAdded = (a, b) => { };
+            UserRemoved = (a, b) => { };
         }
-
-        private List<INotificationSubscriber> Subscribers { get; }
 
         private List<IUserStorageService> Slaves { get; }
 
         private IGeneratorId GeneratorId { get; }
 
         private IUserValidator UserValidator { get; }
+
+        private event EventHandler<User> UserAdded;
+
+        private event EventHandler<User> UserRemoved;
 
         public override UserStorageServiceMode ServiceMode => UserStorageServiceMode.MasterNode;
 
@@ -38,10 +41,7 @@ namespace UserStorageServices.Services
             UserValidator.Validate(user);
             user.Id = GeneratorId.Generate();
             base.Add(user);
-            foreach (var subscriber in Subscribers)
-            {
-                subscriber.UserAdded(user);
-            }
+            UserAdded(this, user);
 
             foreach (var slave in Slaves)
             {
@@ -60,10 +60,8 @@ namespace UserStorageServices.Services
             {
                 throw new ArgumentNullException($"{nameof(user)} is null.");
             }
-            foreach (var subscriber in Subscribers)
-            {
-                subscriber.UserRemoved(user);
-            }
+
+            UserRemoved(this, user);
 
             foreach (var slave in Slaves)
             {
@@ -79,7 +77,9 @@ namespace UserStorageServices.Services
             {
                 throw new ArgumentNullException($"{nameof(subscriber)} is null.");
             }
-            Subscribers.Add(subscriber);
+
+            UserAdded += subscriber.UserAdded;
+            UserRemoved += subscriber.UserRemoved;
         }
 
         public void RemoveSubscriber(INotificationSubscriber subscriber)
@@ -88,7 +88,9 @@ namespace UserStorageServices.Services
             {
                 throw new ArgumentNullException($"{nameof(subscriber)} is null.");
             }
-            Subscribers.Remove(subscriber);
+
+            UserAdded -= subscriber.UserAdded;
+            UserRemoved -= subscriber.UserRemoved;
         }
     }
 }
