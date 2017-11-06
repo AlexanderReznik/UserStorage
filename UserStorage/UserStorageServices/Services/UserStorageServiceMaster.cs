@@ -8,7 +8,7 @@ namespace UserStorageServices.Services
 {
     public class UserStorageServiceMaster : UserStorageServiceBase
     {
-        public UserStorageServiceMaster(IGeneratorId generatorId = null, IUserValidator userValidator = null, IEnumerable<IUserStorageService> slaves = null) : base()
+        public UserStorageServiceMaster(IGeneratorId generatorId = null, IUserValidator userValidator = null, IEnumerable<IUserStorageService> slaves = null, IUserRepository repository = null) : base(repository)
         {
             this.GeneratorId = generatorId ?? new GeneratorGuid();
             this.UserValidator = userValidator ?? new DefaultUserValidator();

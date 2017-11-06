@@ -24,17 +24,7 @@ namespace UserStorageServices.Tests
 
         public void Set(User user)
         {
-            var repUser = Get(user.Id);
-            if (repUser == null)
-            {
-                list.Add(user);
-            }
-            else
-            {
-                repUser.LastName = user.LastName;
-                repUser.FirstName = user.FirstName;
-                repUser.Age = user.Age;
-            }
+            list.Add(user);
         }
 
         public bool Delete(User user)
