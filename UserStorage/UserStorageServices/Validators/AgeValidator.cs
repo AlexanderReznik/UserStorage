@@ -1,5 +1,4 @@
 ﻿using UserStorageServices.Exceptions;
-using UserStorageServices.Interfaces;
 
 namespace UserStorageServices.Validators
 {

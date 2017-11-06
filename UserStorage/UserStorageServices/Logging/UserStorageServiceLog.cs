@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using UserStorageServices.Interfaces;
+using UserStorageServices.Services;
 
-namespace UserStorageServices
+namespace UserStorageServices.Logging
 {
     public class UserStorageServiceLog : UserStorageServiceDecorator
     {

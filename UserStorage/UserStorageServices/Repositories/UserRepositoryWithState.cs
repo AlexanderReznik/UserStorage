@@ -1,10 +1,9 @@
 ﻿using System;
 using UserStorageServices.SerializationStrategy;
-using UserStorageServices.Tests;
 
 namespace UserStorageServices.Repositories
 {
-    public class UserRepositoryWithState : DefaultUserRepository
+    public class UserRepositoryWithState : DefaultUserRepository, IUserRepositoryManager
     {
         public UserRepositoryWithState(string path = null, IUserSerializationStrategy serializer = null)
         {
@@ -26,10 +25,9 @@ namespace UserStorageServices.Repositories
             int lastId;
             this.List = this.Serializer.DeserializeUsers(this.FileName, out lastId);
             GeneratorId.LastId = lastId;
-            Console.WriteLine(GeneratorId.LastId);
         }
 
-        public override void Finish()
+        public override void Stop()
         {
             this.Serializer.SerializeUsers(this.List, this.GeneratorId.LastId, this.FileName);
         }

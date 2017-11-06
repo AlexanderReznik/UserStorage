@@ -1,4 +1,4 @@
-﻿namespace UserStorageServices.Interfaces
+﻿namespace UserStorageServices.IdGenerators
 {
     public interface IGeneratorId
     {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UserStorageServices.Interfaces;
 
 namespace UserStorageServices.Validators
 {

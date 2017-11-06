@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UserStorageServices.Interfaces
+namespace UserStorageServices.Repositories
 {
     public interface IUserRepository
     {
@@ -9,7 +9,7 @@ namespace UserStorageServices.Interfaces
 
         void Start();
 
-        void Finish();
+        void Stop();
 
         User Get(int id);
 

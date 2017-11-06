@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using UserStorageServices.Interfaces;
 using UserStorageServices.Services;
 
-namespace UserStorageServices
+namespace UserStorageServices.Logging
 {
     public abstract class UserStorageServiceDecorator : IUserStorageService
     {

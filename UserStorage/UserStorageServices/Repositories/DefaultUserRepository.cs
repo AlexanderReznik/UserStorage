@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UserStorageServices.IdGenerators;
-using UserStorageServices.Interfaces;
 
-namespace UserStorageServices.Tests
+namespace UserStorageServices.Repositories
 {
     public class DefaultUserRepository : IUserRepository
     {
@@ -23,7 +22,7 @@ namespace UserStorageServices.Tests
         {
         }
 
-        public virtual void Finish()
+        public virtual void Stop()
         {
         }
 

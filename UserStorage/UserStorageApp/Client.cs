@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 using UserStorageServices;
-using UserStorageServices.Interfaces;
+using UserStorageServices.Logging;
 using UserStorageServices.Repositories;
 using UserStorageServices.Services;
 
@@ -12,16 +12,17 @@ namespace UserStorageApp
     public class Client
     {
         private readonly IUserStorageService _userStorageService;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepositoryManager _userRepositoryManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Client"/> class.
         /// </summary>
-        public Client(IUserStorageService service = null, IUserRepository repository = null)
+        public Client(IUserStorageService service = null, IUserRepositoryManager repository = null)
         {
             var path = ReadSetting("SavePath");
-            _userRepository = repository ?? new UserRepositoryWithState(path);
-            _userStorageService = service ?? new UserStorageServiceLog(new UserStorageServiceMaster(repository: _userRepository));
+            var rep = new UserRepositoryWithState(path);
+            _userRepositoryManager = repository ?? rep;
+            _userStorageService = service ?? new UserStorageServiceLog(new UserStorageServiceMaster(repository: rep));
         }
 
         /// <summary>
@@ -36,13 +37,13 @@ namespace UserStorageApp
                 Age = 25
             };
 
-            _userRepository.Start();
+            _userRepositoryManager.Start();
 
             _userStorageService.Add(alex);
             _userStorageService.Search(u => u.LastName == "Star");
             _userStorageService.Remove(alex);
 
-            _userRepository.Finish();
+            _userRepositoryManager.Stop();
 
             /*Console.WriteLine("And now something useful");
 
