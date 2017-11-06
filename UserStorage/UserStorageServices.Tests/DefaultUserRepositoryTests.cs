@@ -18,8 +18,7 @@ namespace UserStorageServices.Tests
             {
                 Age = 46,
                 FirstName = "qwerty",
-                LastName = "qwertyuiop",
-                Id = Guid.NewGuid()
+                LastName = "qwertyuiop"
             });
 
             // Assert
@@ -35,8 +34,7 @@ namespace UserStorageServices.Tests
             {
                 Age = 46,
                 FirstName = "qwerty",
-                LastName = "qwertyuiop",
-                Id = Guid.NewGuid()
+                LastName = "qwertyuiop"
             };
             userMemoryCache.Set(user);
             // Act
@@ -55,8 +53,7 @@ namespace UserStorageServices.Tests
             {
                 Age = 46,
                 FirstName = "qwerty",
-                LastName = "qwertyuiop",
-                Id = Guid.NewGuid()
+                LastName = "qwertyuiop"
             };
             userMemoryCache.Set(user);
             // Act
@@ -75,12 +72,11 @@ namespace UserStorageServices.Tests
             {
                 Age = 46,
                 FirstName = "qwerty",
-                LastName = "qwertyuiop",
-                Id = Guid.NewGuid()
+                LastName = "qwertyuiop"
             };
             userMemoryCache.Set(user);
             // Act
-            var result = userMemoryCache.Get(user.Id);
+            var result = userMemoryCache.Get(user.Id ?? 1);
 
             // Assert
             Assert.AreEqual(result, user);

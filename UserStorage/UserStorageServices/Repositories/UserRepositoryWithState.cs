@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UserStorageServices.Tests;
 using System.Configuration;
+using UserStorageServices.Interfaces;
 using UserStorageServices.SerializationStrategy;
 
 namespace UserStorageServices.Repositories
@@ -29,12 +30,15 @@ namespace UserStorageServices.Repositories
 
         public override void Start()
         {
-            list = Serializer.DeserializeUsers(FileName);
+            int lastId;
+            list = Serializer.DeserializeUsers(FileName, out lastId);
+            GeneratorId.LastId = lastId;
+            Console.WriteLine(GeneratorId.LastId);
         }
 
         public override void Finish()
         {
-            Serializer.SerializeUsers(list, FileName);
+            Serializer.SerializeUsers(list, GeneratorId.LastId, FileName);
         }
     }
 }

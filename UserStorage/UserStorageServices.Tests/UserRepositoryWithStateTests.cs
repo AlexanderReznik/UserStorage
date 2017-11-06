@@ -47,12 +47,12 @@ namespace UserStorageServices.Tests
         private List<User> FillStorage(UserRepositoryWithState storage)
         {
             var list = new List<User>();
-            list.Add(new User { Age = 15, FirstName = "Oleg", LastName = "Egorov" , Id = Guid.NewGuid()});
-            list.Add(new User { Age = 20, FirstName = "Stas", LastName = "Stanislavov", Id = Guid.NewGuid() });
-            list.Add(new User { Age = 25, FirstName = "Oleg", LastName = "Stanislavov", Id = Guid.NewGuid() });
-            list.Add(new User { Age = 30, FirstName = "Stas", LastName = "Olegov", Id = Guid.NewGuid() });
-            list.Add(new User { Age = 35, FirstName = "Volodya", LastName = "Olegov", Id = Guid.NewGuid() });
-            list.Add(new User { Age = 40, FirstName = "Sergey", LastName = "Egorov", Id = Guid.NewGuid() });
+            list.Add(new User { Age = 15, FirstName = "Oleg", LastName = "Egorov" , Id = 1});
+            list.Add(new User { Age = 20, FirstName = "Stas", LastName = "Stanislavov", Id = 2 });
+            list.Add(new User { Age = 25, FirstName = "Oleg", LastName = "Stanislavov", Id = 3 });
+            list.Add(new User { Age = 30, FirstName = "Stas", LastName = "Olegov", Id = 4 });
+            list.Add(new User { Age = 35, FirstName = "Volodya", LastName = "Olegov", Id = 5 });
+            list.Add(new User { Age = 40, FirstName = "Sergey", LastName = "Egorov", Id = 6 });
 
             foreach (var u in list)
             {

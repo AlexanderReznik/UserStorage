@@ -11,32 +11,53 @@ namespace UserStorageServices.SerializationStrategy
 {
     public class XmlUserSerializationStrategy : IUserSerializationStrategy
     {
-        public void SerializeUsers(List<User> list, string fileName)
+        public void SerializeUsers(List<User> list, int lastId, string fileName)
         {
-            fileName = fileName + ".xml";
-            var formatter = new XmlSerializer(typeof(List<User>));
+            var listFileName = fileName + ".xml";
+            var lastIdFileName = fileName + "Id.xml";
+            var listFormatter = new XmlSerializer(typeof(List<User>));
+            var intFormatter = new XmlSerializer(typeof(int));
 
-            using (FileStream fs = new FileStream(fileName, FileMode.Create))
+            using (FileStream fs = new FileStream(listFileName, FileMode.Create))
             {
-                formatter.Serialize(fs, list);
+                listFormatter.Serialize(fs, list);
+            }
+
+            using (FileStream fs = new FileStream(lastIdFileName, FileMode.Create))
+            {
+                intFormatter.Serialize(fs, lastId);
             }
         }
 
-        public List<User> DeserializeUsers(string fileName)
+        public List<User> DeserializeUsers(string fileName, out int lastId)
         {
-            fileName = fileName + ".xml";
-            var formatter = new XmlSerializer(typeof(List<User>));
+            var listFileName = fileName + ".xml";
+            var lastIdFileName = fileName + "Id.xml";
+            var listFormatter = new XmlSerializer(typeof(List<User>));
+            var intFormatter = new XmlSerializer(typeof(int));
             List<User> list;
 
-            if (!File.Exists(fileName))
+            if (!File.Exists(listFileName))
             {
                 list = new List<User>();
             }
             else
             {
-                using (FileStream fs = new FileStream(fileName, FileMode.Open))
+                using (FileStream fs = new FileStream(listFileName, FileMode.Open))
                 {
-                    list = (List<User>)formatter.Deserialize(fs);
+                    list = (List<User>)listFormatter.Deserialize(fs);
+                }
+            }
+
+            if (!File.Exists(lastIdFileName))
+            {
+                lastId = 1000;
+            }
+            else
+            {
+                using (FileStream fs = new FileStream(lastIdFileName, FileMode.Open))
+                {
+                    lastId = (int)intFormatter.Deserialize(fs);
                 }
             }
 

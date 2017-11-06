@@ -1,29 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using UserStorageServices.IdGenerators;
 using UserStorageServices.Interfaces;
 
 namespace UserStorageServices.Tests
 {
     public class DefaultUserRepository : IUserRepository
     {
+        protected IGeneratorId GeneratorId { get; }
+        
         protected List<User> list;
 
-        public DefaultUserRepository()
+        public DefaultUserRepository(IGeneratorId generatorId = null)
         {
             list = new List<User>();
+            GeneratorId = generatorId ?? new GeneratorInt();
         }
 
         public virtual void Start() { }
         
         public virtual void Finish() { }
 
-        public User Get(Guid id)
+        public User Get(int id)
         {
             return list.Find(u => u.Id == id);
         }
 
         public void Set(User user)
         {
+            if (user.Id == null)
+            {
+                user.Id = GeneratorId.Generate();
+            }
             list.Add(user);
         }
 

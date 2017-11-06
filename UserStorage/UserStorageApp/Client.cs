@@ -34,14 +34,14 @@ namespace UserStorageApp
             var alex = new User
             {
                 FirstName = "Alex",
-                LastName = "Black",
+                LastName = "Star",
                 Age = 25
             };
 
             _userRepository.Start();
 
             _userStorageService.Add(alex);
-            _userStorageService.Search("Alex");
+            _userStorageService.Search(u => u.LastName == "Star");
             _userStorageService.Remove(alex);
 
             _userRepository.Finish();

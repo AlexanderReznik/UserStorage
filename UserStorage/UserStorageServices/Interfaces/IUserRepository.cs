@@ -12,7 +12,7 @@ namespace UserStorageServices.Interfaces
 
         void Finish();
 
-        User Get(Guid id);
+        User Get(int id);
 
         void Set(User user);
 
