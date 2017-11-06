@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using UserStorageServices;
 using UserStorageServices.Interfaces;
 using UserStorageServices.Repositories;
@@ -20,7 +21,8 @@ namespace UserStorageApp
         /// </summary>
         public Client(IUserStorageService service = null, IUserRepository repository = null)
         {
-            _userRepository = repository ?? new UserMemoryCacheWithState();
+            var path = ReadSetting("SavePath");
+            _userRepository = repository ?? new UserMemoryCacheWithState(path);
             _userStorageService = service ?? new UserStorageServiceLog(new UserStorageServiceMaster(repository: _userRepository));
         }
 
@@ -38,11 +40,9 @@ namespace UserStorageApp
 
             _userRepository.Start();
 
-            //_userStorageService.Add(alex);
-
-            Console.WriteLine(_userStorageService.Search("Alex").LastName);
-
-            //_userStorageService.Remove(alex);
+            _userStorageService.Add(alex);
+            _userStorageService.Search("Alex");
+            _userStorageService.Remove(alex);
 
             _userRepository.Finish();
 
@@ -65,6 +65,13 @@ namespace UserStorageApp
             Console.WriteLine(slave3.Search(u => u.FirstName == "Alex").LastName);
 
             master.Remove(alex);*/
+        }
+
+        private static string ReadSetting(string key)
+        {
+            var appSettings = ConfigurationManager.AppSettings;
+            string path = appSettings[key];
+            return path;
         }
     }
 }
