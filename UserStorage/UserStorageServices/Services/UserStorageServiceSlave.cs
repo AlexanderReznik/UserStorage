@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using UserStorageServices.Interfaces;
+using UserStorageServices.Repositories;
 
 namespace UserStorageServices.Services
 {

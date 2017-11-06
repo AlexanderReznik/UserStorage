@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UserStorageServices.Interfaces;
+using UserStorageServices.Repositories;
 using UserStorageServices.Validators;
 
 namespace UserStorageServices.Services

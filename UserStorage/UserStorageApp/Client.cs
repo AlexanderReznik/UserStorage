@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using UserStorageServices;
 using UserStorageServices.Interfaces;
+using UserStorageServices.Logging;
 using UserStorageServices.Repositories;
 using UserStorageServices.Services;
 

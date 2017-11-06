@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UserStorageServices.Exceptions;
 using UserStorageServices.Interfaces;
+using UserStorageServices.Logging;
 using UserStorageServices.Services;
 
 namespace UserStorageServices.Tests

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UserStorageServices.Interfaces
+namespace UserStorageServices.Services
 {
     public interface IUserStorageService
     {

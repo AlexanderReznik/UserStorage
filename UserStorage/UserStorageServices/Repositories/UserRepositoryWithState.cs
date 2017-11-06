@@ -1,6 +1,5 @@
 ﻿using System;
 using UserStorageServices.SerializationStrategy;
-using UserStorageServices.Tests;
 
 namespace UserStorageServices.Repositories
 {

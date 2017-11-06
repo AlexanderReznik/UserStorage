@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UserStorageServices.IdGenerators;
 using UserStorageServices.Interfaces;
 
-namespace UserStorageServices.Tests
+namespace UserStorageServices.Repositories
 {
     public class DefaultUserRepository : IUserRepository
     {

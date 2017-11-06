@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UserStorageServices.Repositories;
 
 namespace UserStorageServices.Tests
 {
