@@ -1,6 +1,4 @@
-﻿using UserStorageServices.Interfaces;
-
-namespace UserStorageServices.IdGenerators
+﻿namespace UserStorageServices.IdGenerators
 {
     public class GeneratorInt : IGeneratorId
     {
