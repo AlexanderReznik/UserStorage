@@ -6,7 +6,7 @@ namespace UserStorageServices.Tests
 {
     public class UserMemoryCache : IUserRepository
     {
-        private List<User> list;
+        protected List<User> list;
 
         public UserMemoryCache()
         {

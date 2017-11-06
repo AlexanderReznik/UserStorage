@@ -57,6 +57,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="UserMemoryCacheTests.cs" />
+    <Compile Include="UserMemoryCacheWithStateTests.cs" />
     <Compile Include="UserStorageServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

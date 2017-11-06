@@ -1,14 +1,18 @@
-﻿namespace UserStorageServices
+﻿using System;
+using System.Runtime.Remoting.Messaging;
+
+namespace UserStorageServices
 {
     /// <summary>
     /// Represents a user.
     /// </summary>
+    [Serializable]
     public class User
     {
         /// <summary>
         /// Gets or sets a user id.
         /// </summary>
-        public System.Guid Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets a user first name.
@@ -24,5 +28,35 @@
         /// Gets or sets a user age.
         /// </summary>
         public int Age { get; set; }
+
+        public static bool operator ==(User lhs, User rhs)
+        {
+            if (ReferenceEquals(lhs, rhs))
+            {
+                return true;
+            }
+            if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null))
+            {
+                return false;
+            }
+            return (lhs.LastName == rhs.LastName
+                    && lhs.FirstName == rhs.FirstName
+                    && lhs.Age == rhs.Age
+                    && lhs.Id == rhs.Id);
+        }
+
+        public static bool operator !=(User lhs, User rhs)
+        {
+            return !(lhs == rhs);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is User))
+            {
+                return false;
+            }
+            return (User) obj == this;
+        }
     }
 }

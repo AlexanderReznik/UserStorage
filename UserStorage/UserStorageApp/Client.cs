@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UserStorageServices;
 using UserStorageServices.Interfaces;
+using UserStorageServices.Repositories;
 using UserStorageServices.Services;
 
 namespace UserStorageApp
@@ -12,13 +13,15 @@ namespace UserStorageApp
     public class Client
     {
         private readonly IUserStorageService _userStorageService;
+        private readonly IUserRepository _userRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Client"/> class.
         /// </summary>
-        public Client(IUserStorageService service = null)
+        public Client(IUserStorageService service = null, IUserRepository repository = null)
         {
-            _userStorageService = service ?? new UserStorageServiceLog(new UserStorageServiceMaster());
+            _userRepository = repository ?? new UserMemoryCacheWithState();
+            _userStorageService = service ?? new UserStorageServiceLog(new UserStorageServiceMaster(repository: _userRepository));
         }
 
         /// <summary>
@@ -33,13 +36,17 @@ namespace UserStorageApp
                 Age = 25
             };
 
-            _userStorageService.Add(alex);
+            _userRepository.Start();
 
-            _userStorageService.Search("Alex");
+            //_userStorageService.Add(alex);
 
-            _userStorageService.Remove(alex);
+            Console.WriteLine(_userStorageService.Search("Alex").LastName);
 
-            Console.WriteLine("And now something useful");
+            //_userStorageService.Remove(alex);
+
+            _userRepository.Finish();
+
+            /*Console.WriteLine("And now something useful");
 
             var slave1 = new UserStorageServiceLog(new UserStorageServiceSlave());
             var slave2 = new UserStorageServiceSlave();
@@ -57,7 +64,7 @@ namespace UserStorageApp
 
             Console.WriteLine(slave3.Search(u => u.FirstName == "Alex").LastName);
 
-            master.Remove(alex);
+            master.Remove(alex);*/
         }
     }
 }
