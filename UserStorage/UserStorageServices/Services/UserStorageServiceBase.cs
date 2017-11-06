@@ -33,8 +33,6 @@ namespace UserStorageServices
 
         public abstract UserStorageServiceMode ServiceMode { get; }
 
-        //private List<User> Storage { get; }
-
         private IUserRepository Repository { get; }
 
         /// <summary>

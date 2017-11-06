@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UserStorageServices.Tests
@@ -37,6 +36,7 @@ namespace UserStorageServices.Tests
                 LastName = "qwertyuiop"
             };
             userMemoryCache.Set(user);
+
             // Act
             userMemoryCache.Delete(user);
 
@@ -56,6 +56,7 @@ namespace UserStorageServices.Tests
                 LastName = "qwertyuiop"
             };
             userMemoryCache.Set(user);
+
             // Act
             var result = userMemoryCache.Query(u => u.Age == 46);
 
@@ -75,6 +76,7 @@ namespace UserStorageServices.Tests
                 LastName = "qwertyuiop"
             };
             userMemoryCache.Set(user);
+
             // Act
             var result = userMemoryCache.Get(user.Id ?? 1);
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UserStorageServices.Interfaces
+﻿namespace UserStorageServices.Interfaces
 {
     public interface IGeneratorId
     {

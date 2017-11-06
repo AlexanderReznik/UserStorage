@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Remoting.Messaging;
 
 namespace UserStorageServices
 {
@@ -35,14 +34,16 @@ namespace UserStorageServices
             {
                 return true;
             }
+
             if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null))
             {
                 return false;
             }
-            return (lhs.LastName == rhs.LastName
+
+            return lhs.LastName == rhs.LastName
                     && lhs.FirstName == rhs.FirstName
                     && lhs.Age == rhs.Age
-                    && lhs.Id == rhs.Id);
+                    && lhs.Id == rhs.Id;
         }
 
         public static bool operator !=(User lhs, User rhs)
@@ -56,7 +57,13 @@ namespace UserStorageServices
             {
                 return false;
             }
-            return (User) obj == this;
+
+            return (User)obj == this;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

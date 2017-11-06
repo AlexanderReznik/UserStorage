@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UserStorageServices.Interfaces
 {
     public interface IUserRepository
     {
+        int Count { get; }
+
         void Start();
 
         void Finish();
@@ -17,8 +16,6 @@ namespace UserStorageServices.Interfaces
         void Set(User user);
 
         bool Delete(User user);
-
-        int Count { get; }
 
         IEnumerable<User> Query(Predicate<User> predicate);
     }
