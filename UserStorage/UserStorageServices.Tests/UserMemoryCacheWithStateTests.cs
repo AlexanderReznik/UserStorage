@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UserStorageServices.Repositories;
+using UserStorageServices.SerializationStrategy;
 
 namespace UserStorageServices.Tests
 {
@@ -10,17 +11,34 @@ namespace UserStorageServices.Tests
     public class UserMemoryCacheWithStateTests
     {
         [TestMethod]
-        public void StatrtAndFinish_NoArguments_Success()
+        public void StatrtAndFinish_BinarySerializer_Success()
         {
             // Arrange
-            var userMemoryCacheWithState = new UserMemoryCacheWithState();
-            var userMemoryCacheWithState1 = new UserMemoryCacheWithState();
+            var userMemoryCacheWithState = new UserMemoryCacheWithState(serializer: new BinaryUserSerializationStrategy());
+            var userMemoryCacheWithState1 = new UserMemoryCacheWithState(serializer: new BinaryUserSerializationStrategy());
             var list = FillStorage(userMemoryCacheWithState);
 
             // Act
             userMemoryCacheWithState.Finish();
             userMemoryCacheWithState1.Start();
             
+            // Assert
+            var a1 = userMemoryCacheWithState1.Query(u => true).ToList();
+            CollectionAssert.AreEqual(a1, list);
+        }
+
+        [TestMethod]
+        public void StatrtAndFinish_XmlSerializer_Success()
+        {
+            // Arrange
+            var userMemoryCacheWithState = new UserMemoryCacheWithState(serializer: new XmlUserSerializationStrategy());
+            var userMemoryCacheWithState1 = new UserMemoryCacheWithState(serializer: new XmlUserSerializationStrategy());
+            var list = FillStorage(userMemoryCacheWithState);
+
+            // Act
+            userMemoryCacheWithState.Finish();
+            userMemoryCacheWithState1.Start();
+
             // Assert
             var a1 = userMemoryCacheWithState1.Query(u => true).ToList();
             CollectionAssert.AreEqual(a1, list);

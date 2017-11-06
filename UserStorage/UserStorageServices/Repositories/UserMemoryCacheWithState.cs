@@ -7,47 +7,34 @@ using System.Text;
 using System.Threading.Tasks;
 using UserStorageServices.Tests;
 using System.Configuration;
+using UserStorageServices.SerializationStrategy;
 
 namespace UserStorageServices.Repositories
 {
     public class UserMemoryCacheWithState : UserMemoryCache
     {
+        private IUserSerializationStrategy Serializer { get; }
+
         private string FileName { get; }
 
-        public UserMemoryCacheWithState(string path = null)
+        public UserMemoryCacheWithState(string path = null, IUserSerializationStrategy serializer = null)
         {
             if (string.IsNullOrEmpty(path))
             {
-                path = "repository.bin";
+                path = "repository";
             }
             FileName = path;
+            Serializer = serializer ?? new BinaryUserSerializationStrategy();
         }
 
         public override void Start()
         {
-            var formatter = new BinaryFormatter();
-
-            if (!File.Exists(FileName))
-            {
-                list = new List<User>();
-            }
-            else
-            {
-                using (FileStream fs = new FileStream(FileName, FileMode.Open))
-                {
-                    list = (List<User>) formatter.Deserialize(fs);
-                }
-            }
+            list = Serializer.DeserializeUsers(FileName);
         }
 
         public override void Finish()
         {
-            var formatter = new BinaryFormatter();
-
-            using (FileStream fs = new FileStream(FileName, FileMode.OpenOrCreate))
-            {
-                formatter.Serialize(fs, list);
-            }
+            Serializer.SerializeUsers(list, FileName);
         }
     }
 }

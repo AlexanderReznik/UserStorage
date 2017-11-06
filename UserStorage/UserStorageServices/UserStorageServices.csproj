@@ -53,6 +53,9 @@
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Repositories\UserMemoryCache.cs" />
     <Compile Include="Repositories\UserMemoryCacheWithState.cs" />
+    <Compile Include="SerializationStrategy\BinaryUserSerializationStrategy.cs" />
+    <Compile Include="SerializationStrategy\IUserSerializationStrategy.cs" />
+    <Compile Include="SerializationStrategy\XmlUserSerializationStrategy.cs" />
     <Compile Include="Services\UserStorageServiceMaster.cs" />
     <Compile Include="Services\UserStorageServiceSlave.cs" />
     <Compile Include="UserStorageServiceDecorator.cs" />
