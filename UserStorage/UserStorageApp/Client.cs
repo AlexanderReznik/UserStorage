@@ -22,7 +22,7 @@ namespace UserStorageApp
         public Client(IUserStorageService service = null, IUserRepository repository = null)
         {
             var path = ReadSetting("SavePath");
-            _userRepository = repository ?? new UserMemoryCacheWithState(path);
+            _userRepository = repository ?? new UserRepositoryWithState(path);
             _userStorageService = service ?? new UserStorageServiceLog(new UserStorageServiceMaster(repository: _userRepository));
         }
 

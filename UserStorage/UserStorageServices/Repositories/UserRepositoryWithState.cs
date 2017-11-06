@@ -11,13 +11,13 @@ using UserStorageServices.SerializationStrategy;
 
 namespace UserStorageServices.Repositories
 {
-    public class UserMemoryCacheWithState : UserMemoryCache
+    public class UserRepositoryWithState : DefaultUserRepository
     {
         private IUserSerializationStrategy Serializer { get; }
 
         private string FileName { get; }
 
-        public UserMemoryCacheWithState(string path = null, IUserSerializationStrategy serializer = null)
+        public UserRepositoryWithState(string path = null, IUserSerializationStrategy serializer = null)
         {
             if (string.IsNullOrEmpty(path))
             {

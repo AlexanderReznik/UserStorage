@@ -5,13 +5,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UserStorageServices.Tests
 {
     [TestClass]
-    public class UserMemoryCacheTests
+    public class DefaultUserRepositoryTests
     {
         [TestMethod]
         public void Set_User_Seted()
         {
             // Arrange
-            var userMemoryCache = new UserMemoryCache();
+            var userMemoryCache = new DefaultUserRepository();
 
             // Act
             userMemoryCache.Set(new User()
@@ -30,7 +30,7 @@ namespace UserStorageServices.Tests
         public void Delete_User_Deleted()
         {
             // Arrange
-            var userMemoryCache = new UserMemoryCache();
+            var userMemoryCache = new DefaultUserRepository();
             var user = new User()
             {
                 Age = 46,
@@ -50,7 +50,7 @@ namespace UserStorageServices.Tests
         public void Query_User_Found()
         {
             // Arrange
-            var userMemoryCache = new UserMemoryCache();
+            var userMemoryCache = new DefaultUserRepository();
             var user = new User()
             {
                 Age = 46,
@@ -70,7 +70,7 @@ namespace UserStorageServices.Tests
         public void Get_User_Found()
         {
             // Arrange
-            var userMemoryCache = new UserMemoryCache();
+            var userMemoryCache = new DefaultUserRepository();
             var user = new User()
             {
                 Age = 46,

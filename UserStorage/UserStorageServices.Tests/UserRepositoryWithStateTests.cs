@@ -8,14 +8,14 @@ using UserStorageServices.SerializationStrategy;
 namespace UserStorageServices.Tests
 {
     [TestClass]
-    public class UserMemoryCacheWithStateTests
+    public class UserRepositoryWithStateTests
     {
         [TestMethod]
         public void StatrtAndFinish_BinarySerializer_Success()
         {
             // Arrange
-            var userMemoryCacheWithState = new UserMemoryCacheWithState(serializer: new BinaryUserSerializationStrategy());
-            var userMemoryCacheWithState1 = new UserMemoryCacheWithState(serializer: new BinaryUserSerializationStrategy());
+            var userMemoryCacheWithState = new UserRepositoryWithState(serializer: new BinaryUserSerializationStrategy());
+            var userMemoryCacheWithState1 = new UserRepositoryWithState(serializer: new BinaryUserSerializationStrategy());
             var list = FillStorage(userMemoryCacheWithState);
 
             // Act
@@ -31,8 +31,8 @@ namespace UserStorageServices.Tests
         public void StatrtAndFinish_XmlSerializer_Success()
         {
             // Arrange
-            var userMemoryCacheWithState = new UserMemoryCacheWithState(serializer: new XmlUserSerializationStrategy());
-            var userMemoryCacheWithState1 = new UserMemoryCacheWithState(serializer: new XmlUserSerializationStrategy());
+            var userMemoryCacheWithState = new UserRepositoryWithState(serializer: new XmlUserSerializationStrategy());
+            var userMemoryCacheWithState1 = new UserRepositoryWithState(serializer: new XmlUserSerializationStrategy());
             var list = FillStorage(userMemoryCacheWithState);
 
             // Act
@@ -44,7 +44,7 @@ namespace UserStorageServices.Tests
             CollectionAssert.AreEqual(a1, list);
         }
 
-        private List<User> FillStorage(UserMemoryCacheWithState storage)
+        private List<User> FillStorage(UserRepositoryWithState storage)
         {
             var list = new List<User>();
             list.Add(new User { Age = 15, FirstName = "Oleg", LastName = "Egorov" , Id = Guid.NewGuid()});

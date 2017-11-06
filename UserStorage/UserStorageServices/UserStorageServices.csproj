@@ -51,8 +51,8 @@
     <Compile Include="Exceptions\LastNameIsNullOrEmptyException.cs" />
     <Compile Include="Interfaces\INotificationSubscriber.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
-    <Compile Include="Repositories\UserMemoryCache.cs" />
-    <Compile Include="Repositories\UserMemoryCacheWithState.cs" />
+    <Compile Include="Repositories\DefaultUserRepository.cs" />
+    <Compile Include="Repositories\UserRepositoryWithState.cs" />
     <Compile Include="SerializationStrategy\BinaryUserSerializationStrategy.cs" />
     <Compile Include="SerializationStrategy\IUserSerializationStrategy.cs" />
     <Compile Include="SerializationStrategy\XmlUserSerializationStrategy.cs" />

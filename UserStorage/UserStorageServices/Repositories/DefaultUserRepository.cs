@@ -4,11 +4,11 @@ using UserStorageServices.Interfaces;
 
 namespace UserStorageServices.Tests
 {
-    public class UserMemoryCache : IUserRepository
+    public class DefaultUserRepository : IUserRepository
     {
         protected List<User> list;
 
-        public UserMemoryCache()
+        public DefaultUserRepository()
         {
             list = new List<User>();
         }

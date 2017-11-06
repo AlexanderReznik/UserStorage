@@ -22,7 +22,7 @@ namespace UserStorageServices
         /// </summary>
         protected UserStorageServiceBase(IUserRepository repository = null)
         {
-            Repository = repository ?? new UserMemoryCache();
+            Repository = repository ?? new DefaultUserRepository();
         }
 
         /// <summary>
