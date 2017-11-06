@@ -9,7 +9,7 @@ namespace UserStorageServices.Repositories
 
         void Start();
 
-        void Finish();
+        void Stop();
 
         User Get(int id);
 

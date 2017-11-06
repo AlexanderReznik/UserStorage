@@ -18,7 +18,7 @@ namespace UserStorageServices.Tests
             var list = FillStorage(userMemoryCacheWithState);
 
             // Act
-            userMemoryCacheWithState.Finish();
+            userMemoryCacheWithState.Stop();
             userMemoryCacheWithState1.Start();
             
             // Assert
@@ -35,7 +35,7 @@ namespace UserStorageServices.Tests
             var list = FillStorage(userMemoryCacheWithState);
 
             // Act
-            userMemoryCacheWithState.Finish();
+            userMemoryCacheWithState.Stop();
             userMemoryCacheWithState1.Start();
 
             // Assert

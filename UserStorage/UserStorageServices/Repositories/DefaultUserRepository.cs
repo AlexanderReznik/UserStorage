@@ -22,7 +22,7 @@ namespace UserStorageServices.Repositories
         {
         }
 
-        public virtual void Finish()
+        public virtual void Stop()
         {
         }
 

@@ -53,6 +53,7 @@
     <Compile Include="Interfaces\INotificationSubscriber.cs" />
     <Compile Include="Repositories\IUserRepository.cs" />
     <Compile Include="Repositories\DefaultUserRepository.cs" />
+    <Compile Include="Repositories\IUserRepositoryManager.cs" />
     <Compile Include="Repositories\UserRepositoryWithState.cs" />
     <Compile Include="SerializationStrategy\BinaryUserSerializationStrategy.cs" />
     <Compile Include="SerializationStrategy\IUserSerializationStrategy.cs" />
