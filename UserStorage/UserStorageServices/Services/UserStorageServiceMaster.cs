@@ -8,9 +8,8 @@ namespace UserStorageServices.Services
 {
     public class UserStorageServiceMaster : UserStorageServiceBase
     {
-        public UserStorageServiceMaster(IGeneratorId generatorId = null, IUserValidator userValidator = null, IEnumerable<IUserStorageService> slaves = null) : base()
+        public UserStorageServiceMaster(IUserValidator userValidator = null, IEnumerable<IUserStorageService> slaves = null, IUserRepository repository = null) : base(repository)
         {
-            this.GeneratorId = generatorId ?? new GeneratorGuid();
             this.UserValidator = userValidator ?? new DefaultUserValidator();
             this.Slaves = slaves?.ToList() ?? new List<IUserStorageService>();
             this.UserAdded = (a, b) => { };
@@ -25,8 +24,6 @@ namespace UserStorageServices.Services
 
         private List<IUserStorageService> Slaves { get; }
 
-        private IGeneratorId GeneratorId { get; }
-
         private IUserValidator UserValidator { get; }
 
         /// <summary>
@@ -36,7 +33,6 @@ namespace UserStorageServices.Services
         public override void Add(User user)
         {
             this.UserValidator.Validate(user);
-            user.Id = this.GeneratorId.Generate();
             base.Add(user);
             this.UserAdded(this, user);
 

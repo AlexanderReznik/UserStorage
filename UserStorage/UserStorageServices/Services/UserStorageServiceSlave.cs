@@ -6,6 +6,10 @@ namespace UserStorageServices.Services
 {
     public class UserStorageServiceSlave : UserStorageServiceBase, INotificationSubscriber
     {
+        public UserStorageServiceSlave(IUserRepository repository = null) : base(repository)
+        {
+        }
+
         public override UserStorageServiceMode ServiceMode => UserStorageServiceMode.SlaveNode;
 
         /// <summary>
