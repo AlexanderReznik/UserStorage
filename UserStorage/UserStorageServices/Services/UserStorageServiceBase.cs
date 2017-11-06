@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UserStorageServices.Interfaces;
 using UserStorageServices.Repositories;
-using UserStorageServices.Services;
 
-namespace UserStorageServices
+namespace UserStorageServices.Services
 {
     public enum UserStorageServiceMode
     {
