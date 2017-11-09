@@ -16,20 +16,20 @@ namespace UserStorageServices.Services
             this.Slaves = slaves?.ToList() ?? new List<IUserStorageService>();
             this.UserAdded = (a, b) => { };
             this.UserRemoved = (a, b) => { };
-            Sender = sender ?? new CompositeNotificationSender();
+            this.Sender = sender ?? new CompositeNotificationSender();
         }
 
         private event EventHandler<User> UserAdded;
 
         private event EventHandler<int> UserRemoved;
 
+        public INotificationSender Sender { get; }
+
         public override UserStorageServiceMode ServiceMode => UserStorageServiceMode.MasterNode;
 
         private List<IUserStorageService> Slaves { get; }
 
         private IUserValidator UserValidator { get; }
-
-        public INotificationSender Sender { get; }
 
         /// <summary>
         /// Adds a new <see cref="User"/> to the storage.
@@ -46,9 +46,9 @@ namespace UserStorageServices.Services
                 slave.Add(user);
             }
 
-            Sender.Send(new NotificationContainer()
+            this.Sender.Send(new NotificationContainer()
             {
-                Notifications = new []
+                Notifications = new[] 
                 {
                     new Notification()
                     {
@@ -73,6 +73,7 @@ namespace UserStorageServices.Services
             {
                 throw new ArgumentNullException($"{nameof(id)} is null.");
             }
+
             int newId = (int)id;
             this.UserRemoved(this, newId);
 
@@ -81,7 +82,7 @@ namespace UserStorageServices.Services
                 slave.Remove(newId);
             }
 
-            Sender.Send(new NotificationContainer()
+            this.Sender.Send(new NotificationContainer()
             {
                 Notifications = new[]
                 {

@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace UserStorageServices.Notifications
 {
-    class CompositeNotificationSender : INotificationSender
+    public class CompositeNotificationSender : INotificationSender
     {
-        private List<INotificationSender> Senders;
-
         public CompositeNotificationSender()
         {
             Senders = new List<INotificationSender>();
         }
+
+        private List<INotificationSender> Senders { get; }
 
         public void Send(NotificationContainer container)
         {

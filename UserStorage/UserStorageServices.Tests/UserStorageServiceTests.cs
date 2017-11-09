@@ -480,7 +480,6 @@ namespace UserStorageServices.Tests
             var master = new UserStorageServiceMaster(sender: new NotificationSender());
             master.Sender.AddReceiver(slave.Receiver);
 
-
             // Act
             master.Add(alex);
 
@@ -529,7 +528,6 @@ namespace UserStorageServices.Tests
             master.Sender.AddReceiver(slave1.Receiver);
             master.Sender.AddReceiver(slave2.Receiver);
             master.Sender.AddReceiver(slave3.Receiver);
-
 
             // Act
             master.Add(alex);

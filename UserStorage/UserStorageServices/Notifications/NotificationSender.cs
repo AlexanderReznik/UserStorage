@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace UserStorageServices.Notifications
 {
     public class NotificationSender : INotificationSender
     {
-        private INotificationReceiver Receiver {get; set; }
-
-        private XmlSerializer Serializer { get; }
-
         public NotificationSender(INotificationReceiver receiver = null)
         {
             Receiver = receiver ?? new NotificationReceiver();
             Serializer = new XmlSerializer(typeof(NotificationContainer));
         }
+
+        private INotificationReceiver Receiver { get; set; }
+
+        private XmlSerializer Serializer { get; }
 
         public void AddReceiver(INotificationReceiver receiver)
         {
@@ -26,6 +22,7 @@ namespace UserStorageServices.Notifications
             {
                 throw new ArgumentNullException($"{nameof(receiver)} is null.");
             }
+
             Receiver = receiver;
         }
 
@@ -34,7 +31,7 @@ namespace UserStorageServices.Notifications
             string message;
             using (var stringWriter = new StringWriter())
             {
-                Serializer.Serialize(stringWriter ,container);
+                Serializer.Serialize(stringWriter, container);
                 message = stringWriter.ToString();
             }
             

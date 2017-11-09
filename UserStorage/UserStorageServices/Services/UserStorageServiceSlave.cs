@@ -10,9 +10,9 @@ namespace UserStorageServices.Services
     {
         public UserStorageServiceSlave(IUserRepository repository = null) : base(repository)
         {
-            var reseiver =  new NotificationReceiver();
-            reseiver.Received += NotificationReceived;
-            Receiver = reseiver;
+            var reseiver = new NotificationReceiver();
+            reseiver.Received += this.NotificationReceived;
+            this.Receiver = reseiver;
         }
 
         public INotificationReceiver Receiver { get; }
@@ -70,13 +70,13 @@ namespace UserStorageServices.Services
             {
                 if (notification.Type == NotificationType.AddUser)
                 {
-                    var user = ((AddUserActionNotification) notification.Action).User;
+                    var user = ((AddUserActionNotification)notification.Action).User;
                     this.Add(user);
                 }
                 else if (notification.Type == NotificationType.DeleteUser)
                 {
-                    var id = ((DeleteUserActionNotification) notification.Action).UserId;
-                    Remove(id);
+                    var id = ((DeleteUserActionNotification)notification.Action).UserId;
+                    this.Remove(id);
                 }
             }
         }
