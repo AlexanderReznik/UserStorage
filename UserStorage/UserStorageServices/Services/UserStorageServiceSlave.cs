@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using UserStorageServices.Interfaces;
+using UserStorageServices.Notifications;
 using UserStorageServices.Repositories;
 
 namespace UserStorageServices.Services
@@ -9,7 +10,12 @@ namespace UserStorageServices.Services
     {
         public UserStorageServiceSlave(IUserRepository repository = null) : base(repository)
         {
+            var reseiver =  new NotificationReceiver();
+            reseiver.Received += NotificationReceived;
+            Receiver = reseiver;
         }
+
+        public INotificationReceiver Receiver { get; }
 
         public override UserStorageServiceMode ServiceMode => UserStorageServiceMode.SlaveNode;
 
@@ -56,6 +62,23 @@ namespace UserStorageServices.Services
         public void UserRemoved(object sender, int id)
         {
             this.Remove(id);
+        }
+
+        private void NotificationReceived(NotificationContainer container)
+        {
+            foreach (var notification in container.Notifications)
+            {
+                if (notification.Type == NotificationType.AddUser)
+                {
+                    var user = ((AddUserActionNotification) notification.Action).User;
+                    this.Add(user);
+                }
+                else if (notification.Type == NotificationType.DeleteUser)
+                {
+                    var id = ((DeleteUserActionNotification) notification.Action).UserId;
+                    Remove(id);
+                }
+            }
         }
 
         private bool CheckStackCall(StackTrace st, string command, string argumentType)

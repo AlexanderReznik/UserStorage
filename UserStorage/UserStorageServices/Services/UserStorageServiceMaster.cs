@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UserStorageServices.Interfaces;
+using UserStorageServices.Notifications;
 using UserStorageServices.Repositories;
 using UserStorageServices.Validators;
 
@@ -15,6 +16,7 @@ namespace UserStorageServices.Services
             this.Slaves = slaves?.ToList() ?? new List<IUserStorageService>();
             this.UserAdded = (a, b) => { };
             this.UserRemoved = (a, b) => { };
+            Sender = new NotificationSender();
         }
 
         private event EventHandler<User> UserAdded;
@@ -26,6 +28,8 @@ namespace UserStorageServices.Services
         private List<IUserStorageService> Slaves { get; }
 
         private IUserValidator UserValidator { get; }
+
+        public INotificationSender Sender { get; }
 
         /// <summary>
         /// Adds a new <see cref="User"/> to the storage.
@@ -41,6 +45,21 @@ namespace UserStorageServices.Services
             {
                 slave.Add(user);
             }
+
+            Sender.Send(new NotificationContainer()
+            {
+                Notifications = new []
+                {
+                    new Notification()
+                    {
+                        Type = NotificationType.AddUser,
+                        Action = new AddUserActionNotification()
+                        {
+                            User = user
+                        }
+                    }
+                }
+            });
         }
 
         /// <summary>
@@ -61,6 +80,21 @@ namespace UserStorageServices.Services
             {
                 slave.Remove(newId);
             }
+
+            Sender.Send(new NotificationContainer()
+            {
+                Notifications = new[]
+                {
+                    new Notification()
+                    {
+                        Type = NotificationType.DeleteUser,
+                        Action = new DeleteUserActionNotification()
+                        {
+                            UserId = newId
+                        }
+                    }
+                }
+            });
 
             return base.Remove(newId);
         }
