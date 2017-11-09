@@ -19,7 +19,7 @@ namespace UserStorageServices.Services
 
         private event EventHandler<User> UserAdded;
 
-        private event EventHandler<User> UserRemoved;
+        private event EventHandler<int> UserRemoved;
 
         public override UserStorageServiceMode ServiceMode => UserStorageServiceMode.MasterNode;
 
@@ -46,23 +46,23 @@ namespace UserStorageServices.Services
         /// <summary>
         /// Removes an existed <see cref="User"/> from the storage.
         /// </summary>
-        /// <param name="user">A user to remove</param>
+        /// <param name="id">Id of user to remove</param>
         /// <returns>True if success</returns>
-        public override bool Remove(User user)
+        public override bool Remove(int? id)
         {
-            if (user == null)
+            if (id == null)
             {
-                throw new ArgumentNullException($"{nameof(user)} is null.");
+                throw new ArgumentNullException($"{nameof(id)} is null.");
             }
-
-            this.UserRemoved(this, user);
+            int newId = (int)id;
+            this.UserRemoved(this, newId);
 
             foreach (var slave in this.Slaves)
             {
-                slave.Remove(user);
+                slave.Remove(newId);
             }
 
-            return base.Remove(user);
+            return base.Remove(newId);
         }
 
         public void AddSubscriber(INotificationSubscriber subscriber)

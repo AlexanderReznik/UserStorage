@@ -39,7 +39,7 @@ namespace UserStorageServices.Tests
             userMemoryCache.Set(user);
 
             // Act
-            userMemoryCache.Delete(user);
+            userMemoryCache.Delete((int)user.Id);
 
             // Assert
             Assert.AreEqual(userMemoryCache.Count, 0);

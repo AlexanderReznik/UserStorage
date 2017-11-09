@@ -23,14 +23,14 @@ namespace UserStorageServices.Logging
             base.Add(user);
         }
 
-        public override bool Remove(User user)
+        public override bool Remove(int? id)
         {
             if (this._loggingSwitch.Enabled)
             {
                 Trace.WriteLine("Remove() method is called.");
             }
 
-            return base.Remove(user);
+            return base.Remove(id);
         }
 
         public override User Search(string firstName)

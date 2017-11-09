@@ -22,9 +22,9 @@ namespace UserStorageServices.Logging
             UserStorageService.Add(user);
         }
 
-        public virtual bool Remove(User user)
+        public virtual bool Remove(int? id)
         {
-            return UserStorageService.Remove(user);
+            return UserStorageService.Remove(id);
         }
 
         public virtual User Search(string firstName)

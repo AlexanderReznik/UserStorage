@@ -15,7 +15,7 @@ namespace UserStorageServices.Repositories
 
         void Set(User user);
 
-        bool Delete(User user);
+        bool Delete(int id);
 
         IEnumerable<User> Query(Predicate<User> predicate);
     }
