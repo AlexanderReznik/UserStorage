@@ -10,7 +10,7 @@ namespace UserStorageServices.Notifications
 {
     public class NotificationSender : INotificationSender
     {
-        public INotificationReceiver Receiver {get; set; }
+        private INotificationReceiver Receiver {get; set; }
 
         private XmlSerializer Serializer { get; }
 
@@ -18,6 +18,15 @@ namespace UserStorageServices.Notifications
         {
             Receiver = receiver ?? new NotificationReceiver();
             Serializer = new XmlSerializer(typeof(NotificationContainer));
+        }
+
+        public void AddReceiver(INotificationReceiver receiver)
+        {
+            if (receiver == null)
+            {
+                throw new ArgumentNullException($"{nameof(receiver)} is null.");
+            }
+            Receiver = receiver;
         }
 
         public void Send(NotificationContainer container)

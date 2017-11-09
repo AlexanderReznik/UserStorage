@@ -10,13 +10,13 @@ namespace UserStorageServices.Services
 {
     public class UserStorageServiceMaster : UserStorageServiceBase
     {
-        public UserStorageServiceMaster(IUserValidator userValidator = null, IEnumerable<IUserStorageService> slaves = null, IUserRepository repository = null) : base(repository)
+        public UserStorageServiceMaster(IUserValidator userValidator = null, IEnumerable<IUserStorageService> slaves = null, IUserRepository repository = null, INotificationSender sender = null) : base(repository)
         {
             this.UserValidator = userValidator ?? new DefaultUserValidator();
             this.Slaves = slaves?.ToList() ?? new List<IUserStorageService>();
             this.UserAdded = (a, b) => { };
             this.UserRemoved = (a, b) => { };
-            Sender = new NotificationSender();
+            Sender = sender ?? new CompositeNotificationSender();
         }
 
         private event EventHandler<User> UserAdded;

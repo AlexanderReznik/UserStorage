@@ -52,6 +52,7 @@
     <Compile Include="IdGenerators\GeneratorInt.cs" />
     <Compile Include="Interfaces\INotificationSubscriber.cs" />
     <Compile Include="Notifications\AddUserActionNotification.cs" />
+    <Compile Include="Notifications\CompositeNotificationSender.cs" />
     <Compile Include="Notifications\DeleteUserActionNotification.cs" />
     <Compile Include="Notifications\INotificationReceiver.cs" />
     <Compile Include="Notifications\INotificationSender.cs" />

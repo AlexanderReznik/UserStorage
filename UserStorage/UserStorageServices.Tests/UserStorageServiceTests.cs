@@ -466,7 +466,7 @@ namespace UserStorageServices.Tests
         #region NotificationTests
 
         [TestMethod]
-        public void Add_WithNotification_AllAdded()
+        public void Add_WithNotificationOneSlave_AllAdded()
         {
             // Arrange
             var alex = new User
@@ -477,9 +477,9 @@ namespace UserStorageServices.Tests
             };
 
             var slave = new UserStorageServiceSlave();
-            var master = new UserStorageServiceMaster();
-            ((NotificationSender) master.Sender).Receiver = slave.Receiver;
-            
+            var master = new UserStorageServiceMaster(sender: new NotificationSender());
+            master.Sender.AddReceiver(slave.Receiver);
+
 
             // Act
             master.Add(alex);
@@ -489,7 +489,7 @@ namespace UserStorageServices.Tests
         }
 
         [TestMethod]
-        public void Remove_WithNotification_AllRemoved()
+        public void Remove_WithNotificationOneSlave_AllRemoved()
         {
             // Arrange
             var alex = new User
@@ -500,8 +500,8 @@ namespace UserStorageServices.Tests
             };
 
             var slave = new UserStorageServiceSlave();
-            var master = new UserStorageServiceMaster();
-            ((NotificationSender)master.Sender).Receiver = slave.Receiver;
+            var master = new UserStorageServiceMaster(sender: new NotificationSender());
+            master.Sender.AddReceiver(slave.Receiver);
             master.Add(alex);
 
             // Act
@@ -509,6 +509,60 @@ namespace UserStorageServices.Tests
 
             // Assert
             Assert.IsTrue(master.Count == 0 && slave.Count == 0);
+        }
+
+        [TestMethod]
+        public void Add_WithNotificationManySlaves_AllAdded()
+        {
+            // Arrange
+            var alex = new User
+            {
+                FirstName = "Alex",
+                LastName = "Black",
+                Age = 25
+            };
+
+            var slave1 = new UserStorageServiceSlave();
+            var slave2 = new UserStorageServiceSlave();
+            var slave3 = new UserStorageServiceSlave();
+            var master = new UserStorageServiceMaster();
+            master.Sender.AddReceiver(slave1.Receiver);
+            master.Sender.AddReceiver(slave2.Receiver);
+            master.Sender.AddReceiver(slave3.Receiver);
+
+
+            // Act
+            master.Add(alex);
+
+            // Assert
+            Assert.IsTrue(master.Count == 1 && slave1.Count == 1 && slave2.Count == 1 && slave3.Count == 1);
+        }
+
+        [TestMethod]
+        public void Remove_WithNotificationManySlaves_AllRemoved()
+        {
+            // Arrange
+            var alex = new User
+            {
+                FirstName = "Alex",
+                LastName = "Black",
+                Age = 25
+            };
+
+            var slave1 = new UserStorageServiceSlave();
+            var slave2 = new UserStorageServiceSlave();
+            var slave3 = new UserStorageServiceSlave();
+            var master = new UserStorageServiceMaster();
+            master.Sender.AddReceiver(slave1.Receiver);
+            master.Sender.AddReceiver(slave2.Receiver);
+            master.Sender.AddReceiver(slave3.Receiver);
+            master.Add(alex);
+
+            // Act
+            master.Remove(alex.Id);
+
+            // Assert
+            Assert.IsTrue(master.Count == 0 && slave1.Count == 0 && slave2.Count == 0 && slave3.Count == 0);
         }
 
         #endregion
