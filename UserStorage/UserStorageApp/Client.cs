@@ -41,7 +41,7 @@ namespace UserStorageApp
 
             _userStorageService.Add(alex);
             _userStorageService.Search(u => u.LastName == "Star");
-            _userStorageService.Remove(alex);
+            _userStorageService.Remove(15);
 
             _userRepositoryManager.Stop();
 

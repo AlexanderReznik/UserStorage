@@ -41,9 +41,15 @@ namespace UserStorageServices.Repositories
             List.Add(user);
         }
 
-        public bool Delete(User user)
+        public bool Delete(int id)
         {
-            return List.Remove(user);
+            var listUser = List.Find(user => user.Id == id);
+            if (listUser == null)
+            {
+                return false;
+            }
+
+            return List.Remove(listUser);
         }
 
         public IEnumerable<User> Query(Predicate<User> predicate)

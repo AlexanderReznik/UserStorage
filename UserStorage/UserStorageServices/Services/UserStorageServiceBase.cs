@@ -46,11 +46,11 @@ namespace UserStorageServices.Services
         /// <summary>
         /// Removes an existed <see cref="User"/> from the storage.
         /// </summary>
-        /// <param name="user">A user to remove</param>
+        /// <param name="id">Id of user to remove</param>
         /// <returns>True if success</returns>
-        public virtual bool Remove(User user)
+        public virtual bool Remove(int? id)
         {
-            return Repository.Delete(user);
+            return Repository.Delete((int)id);
         }
 
         /// <summary>

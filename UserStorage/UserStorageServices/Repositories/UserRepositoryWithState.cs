@@ -1,5 +1,4 @@
-﻿using System;
-using UserStorageServices.SerializationStrategy;
+﻿using UserStorageServices.SerializationStrategy;
 
 namespace UserStorageServices.Repositories
 {

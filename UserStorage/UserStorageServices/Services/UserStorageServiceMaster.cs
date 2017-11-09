@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UserStorageServices.Interfaces;
+using UserStorageServices.Notifications;
 using UserStorageServices.Repositories;
 using UserStorageServices.Validators;
 
@@ -9,17 +10,20 @@ namespace UserStorageServices.Services
 {
     public class UserStorageServiceMaster : UserStorageServiceBase
     {
-        public UserStorageServiceMaster(IUserValidator userValidator = null, IEnumerable<IUserStorageService> slaves = null, IUserRepository repository = null) : base(repository)
+        public UserStorageServiceMaster(IUserValidator userValidator = null, IEnumerable<IUserStorageService> slaves = null, IUserRepository repository = null, INotificationSender sender = null) : base(repository)
         {
             this.UserValidator = userValidator ?? new DefaultUserValidator();
             this.Slaves = slaves?.ToList() ?? new List<IUserStorageService>();
             this.UserAdded = (a, b) => { };
             this.UserRemoved = (a, b) => { };
+            this.Sender = sender ?? new CompositeNotificationSender();
         }
 
         private event EventHandler<User> UserAdded;
 
-        private event EventHandler<User> UserRemoved;
+        private event EventHandler<int> UserRemoved;
+
+        public INotificationSender Sender { get; }
 
         public override UserStorageServiceMode ServiceMode => UserStorageServiceMode.MasterNode;
 
@@ -41,28 +45,59 @@ namespace UserStorageServices.Services
             {
                 slave.Add(user);
             }
+
+            this.Sender.Send(new NotificationContainer()
+            {
+                Notifications = new[] 
+                {
+                    new Notification()
+                    {
+                        Type = NotificationType.AddUser,
+                        Action = new AddUserActionNotification()
+                        {
+                            User = user
+                        }
+                    }
+                }
+            });
         }
 
         /// <summary>
         /// Removes an existed <see cref="User"/> from the storage.
         /// </summary>
-        /// <param name="user">A user to remove</param>
+        /// <param name="id">Id of user to remove</param>
         /// <returns>True if success</returns>
-        public override bool Remove(User user)
+        public override bool Remove(int? id)
         {
-            if (user == null)
+            if (id == null)
             {
-                throw new ArgumentNullException($"{nameof(user)} is null.");
+                throw new ArgumentNullException($"{nameof(id)} is null.");
             }
 
-            this.UserRemoved(this, user);
+            int newId = (int)id;
+            this.UserRemoved(this, newId);
 
             foreach (var slave in this.Slaves)
             {
-                slave.Remove(user);
+                slave.Remove(newId);
             }
 
-            return base.Remove(user);
+            this.Sender.Send(new NotificationContainer()
+            {
+                Notifications = new[]
+                {
+                    new Notification()
+                    {
+                        Type = NotificationType.DeleteUser,
+                        Action = new DeleteUserActionNotification()
+                        {
+                            UserId = newId
+                        }
+                    }
+                }
+            });
+
+            return base.Remove(newId);
         }
 
         public void AddSubscriber(INotificationSubscriber subscriber)

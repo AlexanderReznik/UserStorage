@@ -11,7 +11,7 @@ namespace UserStorageServices.Services
 
         void Add(User user);
 
-        bool Remove(User user);
+        bool Remove(int? id);
 
         User Search(string firstName);
 
