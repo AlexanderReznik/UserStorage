@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace UserStorageServices.Notifications
 {
-    public class NotificationSender : INotificationSender
+    public class NotificationSender : MarshalByRefObject, INotificationSender
     {
         public NotificationSender(INotificationReceiver receiver = null)
         {

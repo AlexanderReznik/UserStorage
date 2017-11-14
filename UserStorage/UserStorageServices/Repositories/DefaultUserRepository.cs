@@ -4,7 +4,7 @@ using UserStorageServices.IdGenerators;
 
 namespace UserStorageServices.Repositories
 {
-    public class DefaultUserRepository : IUserRepository
+    public class DefaultUserRepository : MarshalByRefObject, IUserRepository
     {
         public DefaultUserRepository(IGeneratorId generatorId = null)
         {

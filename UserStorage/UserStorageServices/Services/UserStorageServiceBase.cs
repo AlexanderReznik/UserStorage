@@ -14,7 +14,7 @@ namespace UserStorageServices.Services
     /// <summary>
     /// Represents a service that stores a set of <see cref="User"/>s and allows to search through them.
     /// </summary>
-    public abstract class UserStorageServiceBase : IUserStorageService
+    public abstract class UserStorageServiceBase : MarshalByRefObject, IUserStorageService
     {
         /// <summary>
         /// Public c-tor to initialize storage.

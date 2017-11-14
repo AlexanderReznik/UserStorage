@@ -420,11 +420,11 @@ namespace UserStorageServices.Tests
                 Age = 25
             };
 
-            var slave1 = new UserStorageServiceLog(new UserStorageServiceSlave());
+            var slave1 = new UserStorageServiceSlave();
             var slave2 = new UserStorageServiceSlave();
             var slave3 = new UserStorageServiceSlave();
 
-            var master = new UserStorageServiceMaster(slaves: new List<IUserStorageService> { slave1, slave2 });
+            var master = new UserStorageServiceMaster(slaves: new List<UserStorageServiceSlave> { slave1, slave2 });
             master.AddSubscriber(slave3);
 
             // Act
@@ -445,11 +445,11 @@ namespace UserStorageServices.Tests
                 Age = 25
             };
 
-            var slave1 = new UserStorageServiceLog(new UserStorageServiceSlave());
+            var slave1 = new UserStorageServiceSlave();
             var slave2 = new UserStorageServiceSlave();
             var slave3 = new UserStorageServiceSlave();
 
-            var master = new UserStorageServiceMaster(slaves: new List<IUserStorageService> { slave1, slave2 });
+            var master = new UserStorageServiceMaster(slaves: new List<UserStorageServiceSlave> { slave1, slave2 });
             master.AddSubscriber(slave3);
 
             master.Add(alex);

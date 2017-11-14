@@ -4,7 +4,7 @@ using UserStorageServices.Services;
 
 namespace UserStorageServices.Logging
 {
-    public abstract class UserStorageServiceDecorator : IUserStorageService
+    public abstract class UserStorageServiceDecorator : MarshalByRefObject, IUserStorageService
     {
         protected UserStorageServiceDecorator(IUserStorageService service)
         {

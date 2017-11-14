@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using UserStorageServices;
 using UserStorageServices.Logging;
 using UserStorageServices.Repositories;
@@ -9,7 +10,7 @@ namespace UserStorageApp
     /// <summary>
     /// Represents a client that uses an instance of the <see cref="UserStorageService"/>.
     /// </summary>
-    public class Client
+    public class Client : MarshalByRefObject
     {
         private readonly IUserStorageService _userStorageService;
         private readonly IUserRepositoryManager _userRepositoryManager;
@@ -44,26 +45,6 @@ namespace UserStorageApp
             _userStorageService.Remove(15);
 
             _userRepositoryManager.Stop();
-
-            /*Console.WriteLine("And now something useful");
-
-            var slave1 = new UserStorageServiceLog(new UserStorageServiceSlave());
-            var slave2 = new UserStorageServiceSlave();
-            var slave3 = new UserStorageServiceSlave();
-
-            var service = new UserStorageServiceMaster(slaves: new List<IUserStorageService>()
-            {
-                slave1,
-                slave2
-            });
-            service.AddSubscriber(slave3);
-            var master = new UserStorageServiceLog(service);
-            
-            master.Add(alex);
-
-            Console.WriteLine(slave3.Search(u => u.FirstName == "Alex").LastName);
-
-            master.Remove(alex);*/
         }
 
         private static string ReadSetting(string key)
