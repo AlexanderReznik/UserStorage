@@ -25,15 +25,12 @@ namespace UserStorageServices.Services
         /// <param name="user">A new <see cref="User"/> that will be added to the storage.</param>
         public override void Add(User user)
         {
-            StackTrace st = new StackTrace(true);
-            if (this.CheckStackCall(st, "Void Add", typeof(User).FullName))
-            {
-                base.Add(user);
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
+            throw new NotSupportedException();
+        }
+
+        public void AddFromMaster(User user)
+        {
+            base.Add(user);
         }
 
         /// <summary>
@@ -43,25 +40,22 @@ namespace UserStorageServices.Services
         /// <returns>True if success</returns>
         public override bool Remove(int? id)
         {
-            StackTrace st = new StackTrace(true);
-            if (this.CheckStackCall(st, "Boolean Remove", $"System.{typeof(int?).Name}[{typeof(int).FullName}]"))
-            {
-                return base.Remove(id);
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
+            throw new NotSupportedException();
+        }
+
+        public bool RemoveFromMaster(int?id)
+        {
+            return base.Remove(id);
         }
 
         public void UserAdded(object sender, object user)
         {
-            this.Add((User)user);
+            this.AddFromMaster((User)user);
         }
 
         public void UserRemoved(object sender, int id)
         {
-            this.Remove(id);
+            this.RemoveFromMaster(id);
         }
 
         private void NotificationReceived(NotificationContainer container)
@@ -71,12 +65,12 @@ namespace UserStorageServices.Services
                 if (notification.Type == NotificationType.AddUser)
                 {
                     var user = ((AddUserActionNotification)notification.Action).User;
-                    this.Add(user);
+                    this.AddFromMaster(user);
                 }
                 else if (notification.Type == NotificationType.DeleteUser)
                 {
                     var id = ((DeleteUserActionNotification)notification.Action).UserId;
-                    this.Remove(id);
+                    this.RemoveFromMaster(id);
                 }
             }
         }

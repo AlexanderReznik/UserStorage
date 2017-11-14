@@ -4,12 +4,12 @@ using System.Xml.Serialization;
 
 namespace UserStorageServices.Notifications
 {
-    public class NotificationReceiver : INotificationReceiver
+    public class NotificationReceiver : MarshalByRefObject, INotificationReceiver
     {
         public NotificationReceiver()
         {
-            Received = container => { };
-            Serializer = new XmlSerializer(typeof(NotificationContainer));
+            this.Received = container => { };
+            this.Serializer = new XmlSerializer(typeof(NotificationContainer));
         }
 
         public event Action<NotificationContainer> Received;
@@ -21,10 +21,10 @@ namespace UserStorageServices.Notifications
             NotificationContainer container;
             using (var stringReader = new StringReader(message))
             {
-                container = (NotificationContainer)Serializer.Deserialize(stringReader);
+                container = (NotificationContainer)this.Serializer.Deserialize(stringReader);
             }
 
-            Received(container);
+            this.Received(container);
         }
     }
 }

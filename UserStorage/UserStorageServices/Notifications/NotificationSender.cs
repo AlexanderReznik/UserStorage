@@ -4,12 +4,12 @@ using System.Xml.Serialization;
 
 namespace UserStorageServices.Notifications
 {
-    public class NotificationSender : INotificationSender
+    public class NotificationSender : MarshalByRefObject, INotificationSender
     {
         public NotificationSender(INotificationReceiver receiver = null)
         {
-            Receiver = receiver ?? new NotificationReceiver();
-            Serializer = new XmlSerializer(typeof(NotificationContainer));
+            this.Receiver = receiver ?? new NotificationReceiver();
+            this.Serializer = new XmlSerializer(typeof(NotificationContainer));
         }
 
         private INotificationReceiver Receiver { get; set; }
@@ -23,7 +23,7 @@ namespace UserStorageServices.Notifications
                 throw new ArgumentNullException($"{nameof(receiver)} is null.");
             }
 
-            Receiver = receiver;
+            this.Receiver = receiver;
         }
 
         public void Send(NotificationContainer container)
@@ -31,11 +31,11 @@ namespace UserStorageServices.Notifications
             string message;
             using (var stringWriter = new StringWriter())
             {
-                Serializer.Serialize(stringWriter, container);
+                this.Serializer.Serialize(stringWriter, container);
                 message = stringWriter.ToString();
             }
-            
-            Receiver.Receive(message);
+
+            this.Receiver.Receive(message);
         }
     }
 }

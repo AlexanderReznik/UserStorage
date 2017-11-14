@@ -10,10 +10,10 @@ namespace UserStorageServices.Services
 {
     public class UserStorageServiceMaster : UserStorageServiceBase
     {
-        public UserStorageServiceMaster(IUserValidator userValidator = null, IEnumerable<IUserStorageService> slaves = null, IUserRepository repository = null, INotificationSender sender = null) : base(repository)
+        public UserStorageServiceMaster(IUserValidator userValidator = null, IEnumerable<UserStorageServiceSlave> slaves = null, IUserRepository repository = null, INotificationSender sender = null) : base(repository)
         {
             this.UserValidator = userValidator ?? new DefaultUserValidator();
-            this.Slaves = slaves?.ToList() ?? new List<IUserStorageService>();
+            this.Slaves = slaves?.ToList() ?? new List<UserStorageServiceSlave>();
             this.UserAdded = (a, b) => { };
             this.UserRemoved = (a, b) => { };
             this.Sender = sender ?? new CompositeNotificationSender();
@@ -27,7 +27,7 @@ namespace UserStorageServices.Services
 
         public override UserStorageServiceMode ServiceMode => UserStorageServiceMode.MasterNode;
 
-        private List<IUserStorageService> Slaves { get; }
+        private List<UserStorageServiceSlave> Slaves { get; }
 
         private IUserValidator UserValidator { get; }
 
@@ -43,7 +43,7 @@ namespace UserStorageServices.Services
 
             foreach (var slave in this.Slaves)
             {
-                slave.Add(user);
+                slave.AddFromMaster(user);
             }
 
             this.Sender.Send(new NotificationContainer()
@@ -79,7 +79,7 @@ namespace UserStorageServices.Services
 
             foreach (var slave in this.Slaves)
             {
-                slave.Remove(newId);
+                slave.RemoveFromMaster(newId);
             }
 
             this.Sender.Send(new NotificationContainer()

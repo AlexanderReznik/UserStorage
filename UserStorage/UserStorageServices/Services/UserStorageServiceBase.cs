@@ -14,21 +14,21 @@ namespace UserStorageServices.Services
     /// <summary>
     /// Represents a service that stores a set of <see cref="User"/>s and allows to search through them.
     /// </summary>
-    public abstract class UserStorageServiceBase : IUserStorageService
+    public abstract class UserStorageServiceBase : MarshalByRefObject, IUserStorageService
     {
         /// <summary>
         /// Public c-tor to initialize storage.
         /// </summary>
         protected UserStorageServiceBase(IUserRepository repository = null)
         {
-            Repository = repository ?? new DefaultUserRepository();
+            this.Repository = repository ?? new DefaultUserRepository();
         }
 
         /// <summary>
         /// Gets the number of elements contained in the storage.
         /// </summary>
         /// <returns>An amount of users in the storage.</returns>
-        public int Count => Repository.Count;
+        public int Count => this.Repository.Count;
 
         public abstract UserStorageServiceMode ServiceMode { get; }
 
@@ -40,7 +40,7 @@ namespace UserStorageServices.Services
         /// <param name="user">A new <see cref="User"/> that will be added to the storage.</param>
         public virtual void Add(User user)
         {
-            Repository.Set(user);
+            this.Repository.Set(user);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace UserStorageServices.Services
         /// <returns>True if success</returns>
         public virtual bool Remove(int? id)
         {
-            return Repository.Delete((int)id);
+            return this.Repository.Delete((int)id);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace UserStorageServices.Services
                 throw new ArgumentNullException($"{nameof(predicate)} is null.");
             }
 
-            return Repository.Query(predicate).FirstOrDefault();
+            return this.Repository.Query(predicate).FirstOrDefault();
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace UserStorageServices.Services
                 throw new ArgumentNullException($"{nameof(firstName)} is null.");
             }
 
-            return Repository.Query(u => u.FirstName == firstName).FirstOrDefault();
+            return this.Repository.Query(u => u.FirstName == firstName).FirstOrDefault();
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace UserStorageServices.Services
                 throw new ArgumentNullException($"{nameof(predicate)} is null.");
             }
 
-            return Repository.Query(predicate);
+            return this.Repository.Query(predicate);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace UserStorageServices.Services
                 throw new ArgumentNullException($"{nameof(firstName)} is null.");
             }
 
-            return Repository.Query(u => u.FirstName == firstName);
+            return this.Repository.Query(u => u.FirstName == firstName);
         }
     }
 }

@@ -52,6 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
+    <Compile Include="DomainActions\ClientDomainAction.cs" />
+    <Compile Include="DomainActions\MasterDomainAction.cs" />
+    <Compile Include="DomainActions\SlaveDomainAction.cs" />
     <Compile Include="MyDiagnostics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

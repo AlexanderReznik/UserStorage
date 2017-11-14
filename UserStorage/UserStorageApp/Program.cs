@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.ServiceModel;
+using UserStorageApp.DomainActions;
 using ServiceConfiguration = ServiceConfigurationSection.ServiceConfigurationSection;
 
 namespace UserStorageApp
@@ -16,9 +17,17 @@ namespace UserStorageApp
 
             using (var host = new ServiceHost(MyDiagnostics.Create(serviceConfiguration)))
             {
-                // host.SmartOpen();
-                var client = new Client();
+                host.SmartOpen();
 
+                var clientDomainn = AppDomain.CreateDomain("ClientDomain");
+                var typeOfClientDomainAction = typeof(ClientDomainAction);
+
+                var clientDomainAction =
+                    (ClientDomainAction)clientDomainn.CreateInstanceAndUnwrap(
+                        typeOfClientDomainAction.Assembly.FullName, typeOfClientDomainAction.FullName);
+                clientDomainAction.Run();
+
+                var client = clientDomainAction.Client;
                 client.Run();
 
                 Console.WriteLine("Service \"{0}\" that is implemented by \"{1}\" class is available on \"{2}\" endpoint.", host.Description.Name, host.Description.ServiceType.FullName, host.BaseAddresses.First());
