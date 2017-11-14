@@ -22,8 +22,8 @@ namespace UserStorageApp
         {
             var path = ReadSetting("SavePath");
             var rep = new UserRepositoryWithState(path);
-            _userRepositoryManager = repository ?? rep;
-            _userStorageService = service ?? new UserStorageServiceLog(new UserStorageServiceMaster(repository: rep));
+            this._userRepositoryManager = repository ?? rep;
+            this._userStorageService = service ?? new UserStorageServiceLog(new UserStorageServiceMaster(repository: rep));
         }
 
         /// <summary>
@@ -38,13 +38,13 @@ namespace UserStorageApp
                 Age = 25
             };
 
-            _userRepositoryManager.Start();
+            this._userRepositoryManager.Start();
 
-            _userStorageService.Add(alex);
-            _userStorageService.Search(u => u.LastName == "Star");
-            _userStorageService.Remove(15);
+            this._userStorageService.Add(alex);
+            this._userStorageService.Search(u => u.LastName == "Star");
+            this._userStorageService.Remove(15);
 
-            _userRepositoryManager.Stop();
+            this._userRepositoryManager.Stop();
         }
 
         private static string ReadSetting(string key)

@@ -8,43 +8,43 @@ namespace UserStorageServices.Logging
     {
         protected UserStorageServiceDecorator(IUserStorageService service)
         {
-            UserStorageService = service ?? new UserStorageServiceSlave();
+            this.UserStorageService = service ?? new UserStorageServiceSlave();
         }
 
-        public int Count => UserStorageService.Count;
+        public int Count => this.UserStorageService.Count;
 
-        public UserStorageServiceMode ServiceMode => UserStorageService.ServiceMode;
+        public UserStorageServiceMode ServiceMode => this.UserStorageService.ServiceMode;
 
         protected IUserStorageService UserStorageService { get; }
 
         public virtual void Add(User user)
         {
-            UserStorageService.Add(user);
+            this.UserStorageService.Add(user);
         }
 
         public virtual bool Remove(int? id)
         {
-            return UserStorageService.Remove(id);
+            return this.UserStorageService.Remove(id);
         }
 
         public virtual User Search(string firstName)
         {
-            return UserStorageService.Search(firstName);
+            return this.UserStorageService.Search(firstName);
         }
 
         public virtual User Search(Predicate<User> predicate)
         {
-            return UserStorageService.Search(predicate);
+            return this.UserStorageService.Search(predicate);
         }
 
         public virtual IEnumerable<User> SearchAll(string firstName)
         {
-            return UserStorageService.SearchAll(firstName);
+            return this.UserStorageService.SearchAll(firstName);
         }
 
         public virtual IEnumerable<User> SearchAll(Predicate<User> predicate)
         {
-            return UserStorageService.SearchAll(predicate);
+            return this.UserStorageService.SearchAll(predicate);
         }
     }
 }

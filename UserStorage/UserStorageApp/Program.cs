@@ -23,7 +23,7 @@ namespace UserStorageApp
                 var typeOfClientDomainAction = typeof(ClientDomainAction);
 
                 var clientDomainAction =
-                    (ClientDomainAction) clientDomainn.CreateInstanceAndUnwrap(
+                    (ClientDomainAction)clientDomainn.CreateInstanceAndUnwrap(
                         typeOfClientDomainAction.Assembly.FullName, typeOfClientDomainAction.FullName);
                 clientDomainAction.Run();
 

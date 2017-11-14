@@ -8,11 +8,11 @@ namespace UserStorageServices.Repositories
     {
         public DefaultUserRepository(IGeneratorId generatorId = null)
         {
-            List = new List<User>();
-            GeneratorId = generatorId ?? new GeneratorInt();
+            this.List = new List<User>();
+            this.GeneratorId = generatorId ?? new GeneratorInt();
         }
 
-        public int Count => List.Count;
+        public int Count => this.List.Count;
 
         protected List<User> List { get; set; }
 
@@ -28,33 +28,33 @@ namespace UserStorageServices.Repositories
 
         public User Get(int id)
         {
-            return List.Find(u => u.Id == id);
+            return this.List.Find(u => u.Id == id);
         }
 
         public void Set(User user)
         {
             if (user.Id == null)
             {
-                user.Id = GeneratorId.Generate();
+                user.Id = this.GeneratorId.Generate();
             }
 
-            List.Add(user);
+            this.List.Add(user);
         }
 
         public bool Delete(int id)
         {
-            var listUser = List.Find(user => user.Id == id);
+            var listUser = this.List.Find(user => user.Id == id);
             if (listUser == null)
             {
                 return false;
             }
 
-            return List.Remove(listUser);
+            return this.List.Remove(listUser);
         }
 
         public IEnumerable<User> Query(Predicate<User> predicate)
         {
-            return List.FindAll(predicate);
+            return this.List.FindAll(predicate);
         }
     }
 }
