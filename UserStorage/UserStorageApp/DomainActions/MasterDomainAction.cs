@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.ServiceModel;
+using ServiceConfigurationSection;
 using UserStorageServices.Logging;
 using UserStorageServices.Repositories;
 using UserStorageServices.Services;
@@ -15,9 +17,9 @@ namespace UserStorageApp.DomainActions
 
         private List<SlaveDomainAction> SlaveDomainActions { get; } = new List<SlaveDomainAction>();
 
-        public void Run(int slavesCount)
+        public void Run()
         {
-            this.CreateSlaves(slavesCount);
+            this.CreateSlaves();
 
             var path = ReadSetting("SavePath");
             var rep = new UserRepositoryWithState(path);
@@ -39,19 +41,24 @@ namespace UserStorageApp.DomainActions
             return path;
         }
 
-        private void CreateSlaves(int slavesCount)
+        private void CreateSlaves()
         {
             var typeOfSlaveDomainAction = typeof(SlaveDomainAction);
-            for (int i = 0; i < slavesCount; i++)
-            {
-                var slaveDomain = AppDomain.CreateDomain($"SlaveDomain{i}");
+            var serviceConfiguration = (ServiceConfigurationSection.ServiceConfigurationSection)System.Configuration.ConfigurationManager.GetSection("serviceConfiguration");
 
-                var slaveDomainAction =
-                    (SlaveDomainAction)slaveDomain.CreateInstanceAndUnwrap(
-                        typeOfSlaveDomainAction.Assembly.FullName,
-                        typeOfSlaveDomainAction.FullName);
-                slaveDomainAction.Run();
-                this.SlaveDomainActions.Add(slaveDomainAction);
+            foreach (var serviceInstance in serviceConfiguration.ServiceInstances)
+            {
+                if (serviceInstance.Mode == ServiceInstanceMode.Slave)
+                {
+                    var slaveDomain = AppDomain.CreateDomain($"SlaveDomain{SlaveDomainActions.Count}");
+
+                    var slaveDomainAction =
+                        (SlaveDomainAction)slaveDomain.CreateInstanceAndUnwrap(
+                            typeOfSlaveDomainAction.Assembly.FullName,
+                            typeOfSlaveDomainAction.FullName);
+                    slaveDomainAction.Run();
+                    this.SlaveDomainActions.Add(slaveDomainAction);
+                }
             }
         }
     }
